@@ -8,8 +8,20 @@ const THREAT_SHORT = {
   UNWANTED_SOFTWARE:                "Unwanted SW",
   POTENTIALLY_HARMFUL_APPLICATION:  "Harmful App",
   PAYMENT_REDIRECT:                 "Pay Redirect",
+  HEURISTIC:                        "Susp. URL",
+  FORM_HIJACK:                      "Form Hijack",
   UNKNOWN_THREAT:                   "Threat",
 };
+
+function timeUntil(timestamp) {
+  if (!timestamp) return "";
+  const diff = timestamp - Date.now();
+  if (diff <= 0) return "expired";
+  const mins  = Math.floor(diff / 60000);
+  const hours = Math.floor(diff / 3600000);
+  if (mins < 60) return `exp ${mins}m`;
+  return `exp ${hours}h`;
+}
 
 function timeAgo(timestamp) {
   const diff  = Date.now() - timestamp;
@@ -23,7 +35,7 @@ function timeAgo(timestamp) {
 }
 
 function render(data) {
-  const { tally = {}, history = [], bypassed = [] } = data;
+  const { tally = {}, history = [], bypassed = [], whitelist = [] } = data;
 
   // ── Tally ──
   const set = (id, n) => {
@@ -61,11 +73,44 @@ function render(data) {
   if (bypassed.length === 0) {
     bypassList.innerHTML = '<li class="empty-state" style="list-style:none;padding:4px 0 8px">None</li>';
   } else {
-    bypassList.innerHTML = bypassed.map((url) => {
-      const display = url.length > 46 ? url.slice(0, 43) + "…" : url;
-      return `<li title="${url}">${display}</li>`;
+    bypassList.innerHTML = bypassed.map((entry) => {
+      const url = entry.url || entry;
+      const expiry = timeUntil(entry.expiresAt);
+      return `<li>
+        <span class="list-text" title="${url}">${url}</span>
+        ${expiry ? `<span style="font-size:9px;color:#9aa0a6;flex-shrink:0">${expiry}</span>` : ""}
+        <button class="remove-btn" data-type="bypass" data-value="${url}">✕</button>
+      </li>`;
     }).join("");
   }
+
+  // ── Whitelist ──
+  const whitelistList = document.getElementById("whitelist-list");
+  if (whitelist.length === 0) {
+    whitelistList.innerHTML = '<li class="empty-state" style="list-style:none;padding:4px 0 8px">None</li>';
+  } else {
+    whitelistList.innerHTML = whitelist.map((hostname) => `
+      <li>
+        <span class="list-text" title="${hostname}">${hostname}</span>
+        <button class="remove-btn" data-type="whitelist" data-value="${hostname}">✕</button>
+      </li>`).join("");
+  }
+
+  // ── Remove buttons ──
+  document.querySelectorAll(".remove-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const value = btn.dataset.value;
+      if (btn.dataset.type === "bypass") {
+        chrome.runtime.sendMessage({ type: "REMOVE_BYPASS", url: value }, () => {
+          btn.closest("li").remove();
+        });
+      } else {
+        chrome.runtime.sendMessage({ type: "REMOVE_WHITELIST", hostname: value }, () => {
+          btn.closest("li").remove();
+        });
+      }
+    });
+  });
 }
 
 chrome.runtime.sendMessage({ type: "GET_STATS" }, (response) => {

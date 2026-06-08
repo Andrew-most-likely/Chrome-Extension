@@ -1,5 +1,5 @@
 // ============================================================
-// LOCATION INTERCEPTOR — runs in MAIN world (page JS context)
+// LOCATION INTERCEPTOR - runs in MAIN world (page JS context)
 // Declared as a content script with "world": "MAIN" so it
 // executes before any page scripts and is NOT subject to CSP.
 // ============================================================

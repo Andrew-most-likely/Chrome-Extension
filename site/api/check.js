@@ -1,4 +1,4 @@
-// Vercel serverless function — Safe Browsing proxy
+// Vercel serverless function - Safe Browsing proxy
 // The API key lives in Vercel environment variables, never in extension code.
 
 const apiKey = process.env.GSB_TOKEN;
@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   // Allow preflight requests from Chrome extensions
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Detector-Token");
 
   if (req.method === "OPTIONS") {
     return res.status(204).end();
@@ -23,6 +23,15 @@ export default async function handler(req, res) {
 
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  // Validate shared secret when configured
+  const expectedToken = process.env.DETECTOR_TOKEN;
+  if (expectedToken) {
+    const token = req.headers["x-detector-token"];
+    if (token !== expectedToken) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
   }
 
   const { url } = req.body;

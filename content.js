@@ -1,5 +1,5 @@
 // ============================================================
-// PAYMENT REDIRECT DETECTOR — Content Script (ISOLATED world)
+// PAYMENT REDIRECT DETECTOR - Content Script (ISOLATED world)
 // Listens for events dispatched by interceptor.js (MAIN world)
 // and watches for dynamically injected inline scripts.
 // ============================================================

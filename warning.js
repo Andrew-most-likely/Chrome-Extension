@@ -42,6 +42,22 @@ const THREAT_INFO = {
       "This is a strong indicator of a financial phishing attack.",
     ],
   },
+  HEURISTIC: {
+    label: "SUSPICIOUS URL",
+    items: [
+      "This URL matches patterns commonly used in phishing and fraud.",
+      "It may be impersonating a well-known brand or using a deceptive domain name.",
+      "Legitimate sites do not use IP addresses, number substitutions, or free high-risk domains.",
+    ],
+  },
+  FORM_HIJACK: {
+    label: "CREDENTIAL HARVESTING FORM",
+    items: [
+      "This page contains a login form that sends your password to a different website.",
+      "Legitimate sites always submit credentials to their own domain.",
+      "Entering your password here will likely send it directly to attackers.",
+    ],
+  },
   UNKNOWN_THREAT: {
     label: "SECURITY THREAT",
     items: [
@@ -98,6 +114,16 @@ function setupButtons() {
     // history.back() would return to the malicious URL and re-trigger the warning.
     // Ask background to navigate the tab to the new tab page instead.
     chrome.runtime.sendMessage({ type: "GO_BACK_SAFE" });
+  });
+
+  document.getElementById("btn-whitelist").addEventListener("click", () => {
+    if (!url) return;
+    const btn = document.getElementById("btn-whitelist");
+    btn.disabled = true;
+    btn.textContent = "Adding to whitelist…";
+    chrome.runtime.sendMessage({ type: "ADD_WHITELIST", url }, () => {
+      window.location.href = url;
+    });
   });
 
   document.getElementById("btn-proceed").addEventListener("click", () => {

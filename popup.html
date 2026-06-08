@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Phishing Detector</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon32.png" />
+  <link rel="icon" type="image/png" sizes="48x48" href="icons/icon48.png" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -143,19 +145,33 @@
       font-style: italic;
     }
 
-    /* Bypassed */
-    .bypass-list { list-style: none; max-height: 80px; overflow-y: auto; }
-    .bypass-list li {
+    /* Bypassed / Whitelist lists */
+    .bypass-list, .whitelist-list { list-style: none; max-height: 80px; overflow-y: auto; }
+    .bypass-list li, .whitelist-list li {
       font-size: 11px;
       color: #3c4043;
       padding: 3px 0;
       border-bottom: 1px solid #f1f3f4;
       display: flex;
+      align-items: center;
       gap: 6px;
-      align-items: flex-start;
       word-break: break-all;
     }
-    .bypass-list li::before { content: "⚠"; color: #f29900; flex-shrink: 0; font-size: 10px; }
+    .bypass-list li::before  { content: "⚠"; color: #f29900; flex-shrink: 0; font-size: 10px; }
+    .whitelist-list li::before { content: "✓"; color: #137333; flex-shrink: 0; font-size: 10px; }
+    .list-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .remove-btn {
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      color: #9aa0a6;
+      cursor: pointer;
+      font-size: 10px;
+      padding: 1px 3px;
+      border-radius: 2px;
+      line-height: 1;
+    }
+    .remove-btn:hover { background: #f1f3f4; color: #c5221f; }
 
     footer {
       padding: 8px 16px;
@@ -209,6 +225,13 @@
   <div class="section">
     <div class="section-title">Bypassed this session</div>
     <ul class="bypass-list" id="bypass-list">
+      <li class="empty-state" style="list-style:none;padding:4px 0 8px">None</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Whitelisted domains</div>
+    <ul class="whitelist-list" id="whitelist-list">
       <li class="empty-state" style="list-style:none;padding:4px 0 8px">None</li>
     </ul>
   </div>

@@ -1,8 +1,10 @@
 {
   "name": "Phishing Detector",
-  "description": "Detects phishing and malicious payment redirect attempts in real time.",
+  "description": "Real-time phishing protection. Blocks dangerous sites, payment redirects, and credential-harvesting forms before they load.",
   "version": "1.0.0",
   "manifest_version": 3,
+  "homepage_url": "https://chrome-extension-nu-eight.vercel.app",
+  "minimum_chrome_version": "102",
 
   "permissions": [
     "webNavigation",
@@ -31,6 +33,11 @@
       "matches": ["https://*/*", "http://*/*"],
       "js": ["content.js"],
       "run_at": "document_start"
+    },
+    {
+      "matches": ["https://*/*", "http://*/*", "file://*/*"],
+      "js": ["form-scanner.js"],
+      "run_at": "document_idle"
     }
   ],
 
