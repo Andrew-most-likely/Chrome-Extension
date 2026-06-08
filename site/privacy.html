@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — Phishing Detector</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #fff;
+      color: #202124;
+    }
+
+    nav {
+      background: #1a73e8;
+      color: #fff;
+      padding: 0 40px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      text-decoration: none;
+      color: #fff;
+    }
+    .nav-links { display: flex; gap: 24px; }
+    .nav-links a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .nav-links a:hover { color: #fff; }
+
+    .page-header {
+      background: #f8f9fa;
+      border-bottom: 1px solid #e8eaed;
+      padding: 48px 40px 36px;
+      text-align: center;
+    }
+    .page-header h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+    .page-header p  { font-size: 14px; color: #5f6368; }
+
+    .content {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 60px 40px 80px;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 40px 0 12px;
+      color: #202124;
+    }
+    h2:first-child { margin-top: 0; }
+
+    p, li {
+      font-size: 15px;
+      color: #3c4043;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    ul {
+      list-style: disc;
+      padding-left: 24px;
+      margin-bottom: 12px;
+    }
+    li { margin-bottom: 6px; }
+
+    .highlight-box {
+      background: #e8f0fe;
+      border-left: 4px solid #1a73e8;
+      border-radius: 0 4px 4px 0;
+      padding: 16px 20px;
+      margin: 24px 0;
+    }
+    .highlight-box p { margin-bottom: 0; color: #1a237e; font-weight: 500; }
+
+    footer {
+      text-align: center;
+      padding: 32px 40px;
+      font-size: 13px;
+      color: #9aa0a6;
+      border-top: 1px solid #e8eaed;
+    }
+    footer a { color: #1a73e8; text-decoration: none; margin: 0 12px; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-brand" href="index.html">🛡️ Phishing Detector</a>
+    <div class="nav-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <h1>Privacy Policy</h1>
+    <p>Last updated: June 8, 2026</p>
+  </div>
+
+  <div class="content">
+
+    <div class="highlight-box">
+      <p>🛡️ Phishing Detector does not collect, store, or sell your personal data. URLs you visit are sent only to Google's Safe Browsing API for threat checking and are not retained by us.</p>
+    </div>
+
+    <h2>1. Overview</h2>
+    <p>
+      This Privacy Policy describes how the Phishing Detector browser extension ("the Extension", "we", "us") handles information when you use it. We are committed to protecting your privacy and being transparent about our practices.
+    </p>
+
+    <h2>2. Information We Do NOT Collect</h2>
+    <p>The Extension does not collect, transmit to our servers, or store any of the following:</p>
+    <ul>
+      <li>Your browsing history</li>
+      <li>Your personal identity or account information</li>
+      <li>Passwords or form data</li>
+      <li>Cookies or browser storage from other sites</li>
+      <li>Crash reports or telemetry</li>
+    </ul>
+
+    <h2>3. How URL Checking Works</h2>
+    <p>
+      When you navigate to a website, the Extension sends the URL to the
+      <strong>Google Safe Browsing API (v4)</strong> to check whether it appears on Google's
+      databases of known phishing, malware, and unwanted software sites.
+    </p>
+    <p>
+      This request is made directly from your browser to Google's servers. The Extension
+      itself does not receive, log, or store the results beyond your current browser session.
+      Google's handling of this data is governed by the
+      <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.
+    </p>
+
+    <h2>4. Local Script Analysis</h2>
+    <p>
+      The Extension also scans inline JavaScript on pages you visit for patterns
+      associated with payment redirect attacks. This analysis happens entirely
+      <strong>on your device</strong> — no script content is sent to any server.
+    </p>
+
+    <h2>5. Session Storage</h2>
+    <p>
+      If you choose "Proceed anyway" on a warning page, the Extension stores that URL in
+      your browser's session storage so it is not blocked again during the same browser session.
+      This data is stored locally in your browser and is automatically cleared when you
+      close Chrome. It is never transmitted anywhere.
+    </p>
+
+    <h2>6. Permissions We Request</h2>
+    <p>The Extension requests the following Chrome permissions and why:</p>
+    <ul>
+      <li><strong>webNavigation</strong> — to detect when you navigate to a new page so URLs can be checked.</li>
+      <li><strong>tabs</strong> — to redirect the current tab to the warning page when a threat is detected.</li>
+      <li><strong>storage</strong> — to store your session bypass list locally in your browser.</li>
+      <li><strong>scripting</strong> — to inject the script scanner into pages you visit.</li>
+      <li><strong>Host permissions (https://*/, http://*/)</strong> — required to run the content script on all web pages and to contact the Safe Browsing API.</li>
+    </ul>
+
+    <h2>7. Third-Party Services</h2>
+    <p>
+      The Extension uses the <strong>Google Safe Browsing API</strong>. When a URL is
+      checked, it is transmitted to Google's servers under
+      <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>
+      and the Safe Browsing
+      <a href="https://developers.google.com/safe-browsing/terms" target="_blank" rel="noopener">Terms of Service</a>.
+      No other third-party services are used.
+    </p>
+
+    <h2>8. Children's Privacy</h2>
+    <p>
+      The Extension is not directed at children under the age of 13 and does not
+      knowingly collect any information from children.
+    </p>
+
+    <h2>9. Changes to This Policy</h2>
+    <p>
+      We may update this Privacy Policy from time to time. Any changes will be reflected
+      by the "Last updated" date at the top of this page. Continued use of the Extension
+      after changes constitutes your acceptance of the revised policy.
+    </p>
+
+    <h2>10. Contact</h2>
+    <p>
+      If you have any questions about this Privacy Policy, please open an issue on our
+      GitHub repository or contact us at the email address listed on the Chrome Web Store listing.
+    </p>
+
+  </div>
+
+  <footer>
+    &copy; 2026 Phishing Detector &mdash;
+    <a href="index.html">Home</a>
+    <a href="terms.html">Terms of Service</a>
+  </footer>
+
+</body>
+</html>

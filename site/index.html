@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phishing Detector — Real-time browser protection</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #fff;
+      color: #202124;
+    }
+
+    /* Nav */
+    nav {
+      background: #1a73e8;
+      color: #fff;
+      padding: 0 40px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      text-decoration: none;
+      color: #fff;
+    }
+    .nav-links { display: flex; gap: 24px; }
+    .nav-links a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: #fff; }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+      color: #fff;
+      text-align: center;
+      padding: 80px 40px 100px;
+    }
+    .hero .icon { font-size: 72px; margin-bottom: 24px; display: block; }
+    .hero h1 { font-size: 42px; font-weight: 700; line-height: 1.2; margin-bottom: 16px; }
+    .hero p {
+      font-size: 18px;
+      opacity: 0.9;
+      max-width: 560px;
+      margin: 0 auto 36px;
+      line-height: 1.6;
+    }
+    .btn-cta {
+      display: inline-block;
+      background: #fff;
+      color: #1a73e8;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 32px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: box-shadow 0.15s;
+    }
+    .btn-cta:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+
+    /* Features */
+    .features {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 80px 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 40px;
+    }
+    .feature { text-align: center; }
+    .feature .feat-icon { font-size: 40px; margin-bottom: 16px; display: block; }
+    .feature h3 { font-size: 18px; font-weight: 600; margin-bottom: 10px; }
+    .feature p { font-size: 14px; color: #5f6368; line-height: 1.6; }
+
+    /* How it works */
+    .how {
+      background: #f8f9fa;
+      padding: 80px 40px;
+      text-align: center;
+    }
+    .how h2 { font-size: 28px; font-weight: 600; margin-bottom: 48px; }
+    .steps {
+      max-width: 800px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+    }
+    .step { text-align: center; }
+    .step-num {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: #1a73e8;
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .step h4 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+    .step p  { font-size: 13px; color: #5f6368; line-height: 1.5; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 32px 40px;
+      font-size: 13px;
+      color: #9aa0a6;
+      border-top: 1px solid #e8eaed;
+    }
+    footer a { color: #1a73e8; text-decoration: none; margin: 0 12px; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-brand" href="index.html">🛡️ Phishing Detector</a>
+    <div class="nav-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <span class="icon">🛡️</span>
+    <h1>Browse Safely.<br>Block Phishing in Real Time.</h1>
+    <p>
+      Phishing Detector checks every site you visit against Google's Safe Browsing database
+      and scans for suspicious payment redirect scripts — before they can harm you.
+    </p>
+    <a href="#" class="btn-cta">Add to Chrome — It's Free</a>
+  </section>
+
+  <section class="features">
+    <div class="feature">
+      <span class="feat-icon">🔍</span>
+      <h3>Google Safe Browsing</h3>
+      <p>Every URL you visit is checked against Google's continuously updated database of known phishing, malware, and social engineering sites.</p>
+    </div>
+    <div class="feature">
+      <span class="feat-icon">💳</span>
+      <h3>Payment Redirect Detection</h3>
+      <p>Inline scripts that attempt to silently redirect you to payment services like PayPal, Stripe, or cryptocurrency platforms are caught and flagged.</p>
+    </div>
+    <div class="feature">
+      <span class="feat-icon">⚡</span>
+      <h3>Instant Warning Page</h3>
+      <p>When a threat is detected, you're shown a clear warning page explaining why the site was blocked — just like Chrome's built-in security warnings.</p>
+    </div>
+    <div class="feature">
+      <span class="feat-icon">🔓</span>
+      <h3>You Stay in Control</h3>
+      <p>If you trust a flagged site, you can choose to proceed anyway. Your decision is remembered for the session so you won't be interrupted again.</p>
+    </div>
+  </section>
+
+  <section class="how">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h4>You navigate to a site</h4>
+        <p>The extension intercepts every top-level page navigation in your browser.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h4>URL is checked</h4>
+        <p>The URL is submitted to the Google Safe Browsing API and checked for known threats.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h4>Scripts are scanned</h4>
+        <p>Inline JavaScript is analyzed for redirect patterns pointing to payment services.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h4>You're warned or protected</h4>
+        <p>If a threat is found, you see a blocking warning page with the full reason before anything loads.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2026 Phishing Detector &mdash;
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a>
+  </footer>
+
+</body>
+</html>

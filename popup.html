@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phishing Detector</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #fff;
+      color: #202124;
+      width: 320px;
+      min-height: 200px;
+    }
+
+    /* Header */
+    .header {
+      background: #1a73e8;
+      color: #fff;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header .icon { font-size: 26px; }
+    .header h1  { font-size: 15px; font-weight: 600; }
+    .header p   { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+
+    /* Active status bar */
+    .status {
+      padding: 8px 20px;
+      background: #e6f4ea;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #137333;
+      border-bottom: 1px solid #d2e3cc;
+    }
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #34a853;
+      flex-shrink: 0;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.35; }
+    }
+
+    /* Stats row */
+    .stats {
+      display: flex;
+      border-bottom: 1px solid #e8eaed;
+    }
+    .stat-item {
+      flex: 1;
+      padding: 16px 12px;
+      text-align: center;
+      border-right: 1px solid #e8eaed;
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #c5221f;
+      line-height: 1;
+    }
+    .stat-value.bypassed-value { color: #f29900; }
+    .stat-label {
+      font-size: 11px;
+      color: #5f6368;
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Bypassed list */
+    .section { padding: 12px 20px 8px; }
+    .section h2 {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #5f6368;
+      margin-bottom: 8px;
+    }
+    .bypass-list {
+      list-style: none;
+      max-height: 140px;
+      overflow-y: auto;
+    }
+    .bypass-list li {
+      font-size: 12px;
+      color: #3c4043;
+      padding: 5px 0;
+      border-bottom: 1px solid #f1f3f4;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      word-break: break-all;
+      line-height: 1.4;
+    }
+    .bypass-list li::before {
+      content: "⚠";
+      color: #f29900;
+      flex-shrink: 0;
+      font-size: 11px;
+      margin-top: 1px;
+    }
+    .empty-state {
+      font-size: 12px;
+      color: #9aa0a6;
+      padding: 4px 0 8px;
+      font-style: italic;
+    }
+    .empty-state::before { display: none; }
+
+    footer {
+      padding: 10px 20px;
+      font-size: 11px;
+      color: #9aa0a6;
+      border-top: 1px solid #e8eaed;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span class="icon">🛡️</span>
+    <div>
+      <h1>Phishing Detector</h1>
+      <p>Real-time protection active</p>
+    </div>
+  </div>
+
+  <div class="status">
+    <div class="status-dot"></div>
+    <span>Monitoring all navigations</span>
+  </div>
+
+  <div class="stats">
+    <div class="stat-item">
+      <div class="stat-value" id="blocked-count">0</div>
+      <div class="stat-label">Blocked this session</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value bypassed-value" id="bypass-count">0</div>
+      <div class="stat-label">Bypassed by you</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Bypassed sites (this session)</h2>
+    <ul class="bypass-list" id="bypass-list">
+      <li class="empty-state">None yet</li>
+    </ul>
+  </div>
+
+  <footer>Protected by Google Safe Browsing API v4</footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

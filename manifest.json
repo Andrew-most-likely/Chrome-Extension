@@ -1,0 +1,42 @@
+{
+  "name": "Phishing Detector",
+  "description": "Detects phishing and malicious payment redirect attempts in real time.",
+  "version": "1.0.0",
+  "manifest_version": 3,
+
+  "permissions": [
+    "webNavigation",
+    "tabs",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://safebrowsing.googleapis.com/*",
+    "https://*/*",
+    "http://*/*"
+  ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["https://*/*", "http://*/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "hello_extensions.png"
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": ["warning.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
