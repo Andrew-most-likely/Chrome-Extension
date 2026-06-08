@@ -90,8 +90,9 @@
         databases of suspected phishing, malware, and unwanted software sites.
       </p>
       <p>
-        This request is made directly from your browser to Google's servers. The Extension
-        itself does not receive, log, or store the results beyond your current browser session.
+        This request is routed through a privacy proxy hosted on Vercel (a cloud platform)
+        before being forwarded to Google's servers. The proxy does not log URLs or store
+        any request data — it exists solely to keep the API key off the client device.
         Google's handling of this data is governed by the
         <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a>.
       </p>
@@ -129,12 +130,24 @@
 
       <h2 id="third-party">7. Third-Party Services</h2>
       <p>
-        The Extension uses the <strong>Google Safe Browsing API</strong>. When a URL is
-        checked, it is transmitted to Google's servers under
-        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a>
-        and the Safe Browsing
-        <a href="https://developers.google.com/safe-browsing/terms" target="_blank" rel="noopener noreferrer">Terms of Service</a>.
-        No other third-party services are used.
+        The Extension uses the following third-party services:
+      </p>
+      <ul>
+        <li>
+          <strong>Google Safe Browsing API</strong> — URLs are forwarded to Google's servers
+          for threat checking under
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a>
+          and the Safe Browsing
+          <a href="https://developers.google.com/safe-browsing/terms" target="_blank" rel="noopener noreferrer">Terms of Service</a>.
+        </li>
+        <li>
+          <strong>Vercel</strong> — the API proxy is hosted on Vercel's infrastructure.
+          URLs pass through Vercel's network in transit to Google but are not logged or retained.
+          Vercel's privacy practices are described in the
+          <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">Vercel Privacy Policy</a>.
+        </li>
+      </ul>
+      <p>
       </p>
 
       <h2 id="children">8. Children's Privacy</h2>
