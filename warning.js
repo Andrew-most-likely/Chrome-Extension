@@ -2,6 +2,14 @@
 // WARNING PAGE LOGIC
 // ============================================================
 
+// Prevent this page from being embedded in iframes by external websites.
+// An attacker could otherwise iframe warning.html with crafted parameters
+// to social-engineer the user on a third-party page.
+if (window.self !== window.top) {
+  document.documentElement.innerHTML = "";
+  window.stop();
+}
+
 const THREAT_INFO = {
   MALWARE: {
     label: "MALWARE",
@@ -68,6 +76,22 @@ const THREAT_INFO = {
 };
 
 // ============================================================
+// URL validation
+// ============================================================
+
+// Only allow http:// and https:// URLs. Blocks javascript:, data:,
+// vbscript:, and other schemes that could be injected via the ?url= param.
+function isSafeUrl(url) {
+  if (!url || typeof url !== "string") return false;
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch (_) {
+    return false;
+  }
+}
+
+// ============================================================
 // Parse URL parameters
 // ============================================================
 
@@ -90,7 +114,11 @@ function render() {
   const info = THREAT_INFO[threat] || THREAT_INFO["UNKNOWN_THREAT"];
 
   document.getElementById("threat-label").textContent = info.label;
-  document.getElementById("blocked-url").textContent = url || "(unknown)";
+
+  // Only display the URL if it is a safe http/https URL to prevent open redirect
+  // display issues and to signal clearly when the warning page was opened with a
+  // crafted/invalid parameter.
+  document.getElementById("blocked-url").textContent = isSafeUrl(url) ? url : "(invalid or unknown URL)";
 
   const list = document.getElementById("threat-details");
   list.innerHTML = info.items.map((item) => `<li>${item}</li>`).join("");
@@ -100,6 +128,14 @@ function render() {
     const snippetBlock = document.getElementById("snippet-block");
     snippetBlock.style.display = "block";
     document.getElementById("snippet-code").textContent = detail;
+  }
+
+  // Hide the navigation buttons if the URL is not a safe http/https URL.
+  // This prevents the open redirect: a crafted ?url=javascript:... or
+  // ?url=data:... cannot trigger code execution via the proceed/whitelist buttons.
+  if (!isSafeUrl(url)) {
+    document.getElementById("btn-proceed").style.display = "none";
+    document.getElementById("btn-whitelist").style.display = "none";
   }
 }
 
@@ -117,17 +153,17 @@ function setupButtons() {
   });
 
   document.getElementById("btn-whitelist").addEventListener("click", () => {
-    if (!url) return;
+    if (!isSafeUrl(url)) return;
     const btn = document.getElementById("btn-whitelist");
     btn.disabled = true;
-    btn.textContent = "Adding to whitelist…";
+    btn.textContent = "Adding to whitelist...";
     chrome.runtime.sendMessage({ type: "ADD_WHITELIST", url }, () => {
       window.location.href = url;
     });
   });
 
   document.getElementById("btn-proceed").addEventListener("click", () => {
-    if (!url) return;
+    if (!isSafeUrl(url)) return;
 
     const btn = document.getElementById("btn-proceed");
     btn.disabled = true;

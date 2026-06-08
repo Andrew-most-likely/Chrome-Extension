@@ -35,25 +35,39 @@ export default async function handler(req, res) {
   }
 
   const { url } = req.body;
-  if (!url || typeof url !== "string") {
-    return res.status(400).json({ error: "url is required" });
+
+  // Validate URL: must be a string, within length limits, and http/https only.
+  // This prevents quota exhaustion from garbage/oversized payloads and blocks
+  // non-HTTP schemes (javascript:, ftp:, etc.) from being forwarded upstream.
+  if (!url || typeof url !== "string" || url.length > 2048) {
+    return res.status(400).json({ error: "url must be a non-empty string under 2048 characters" });
+  }
+  try {
+    const parsedUrl = new URL(url);
+    if (parsedUrl.protocol !== "http:" && parsedUrl.protocol !== "https:") {
+      return res.status(400).json({ error: "url must use http or https scheme" });
+    }
+  } catch (_) {
+    return res.status(400).json({ error: "url is not a valid URL" });
   }
 
   // ── Test URL simulation ──────────────────────────────────
-  // Requests for URLs containing these slugs return fake threat
-  // data so the full extension pipeline can be tested locally
-  // without needing a real malicious site.
-  const TEST_SLUGS = {
-    "pd-test-malware":        "MALWARE",
-    "pd-test-phishing":       "SOCIAL_ENGINEERING",
-    "pd-test-unwanted":       "UNWANTED_SOFTWARE",
-    "pd-test-harmful":        "POTENTIALLY_HARMFUL_APPLICATION",
-  };
-  for (const [slug, threatType] of Object.entries(TEST_SLUGS)) {
-    if (url.includes(slug)) {
-      return res.status(200).json({
-        matches: [{ threatType, platformType: "ANY_PLATFORM", threatEntryType: "URL" }],
-      });
+  // Only active when ENABLE_TEST_SLUGS=true in Vercel environment variables.
+  // Requests for URLs containing these slugs return fake threat data so the
+  // full extension pipeline can be tested without needing a real malicious site.
+  if (process.env.ENABLE_TEST_SLUGS === "true") {
+    const TEST_SLUGS = {
+      "pd-test-malware":   "MALWARE",
+      "pd-test-phishing":  "SOCIAL_ENGINEERING",
+      "pd-test-unwanted":  "UNWANTED_SOFTWARE",
+      "pd-test-harmful":   "POTENTIALLY_HARMFUL_APPLICATION",
+    };
+    for (const [slug, threatType] of Object.entries(TEST_SLUGS)) {
+      if (url.includes(slug)) {
+        return res.status(200).json({
+          matches: [{ threatType, platformType: "ANY_PLATFORM", threatEntryType: "URL" }],
+        });
+      }
     }
   }
   // ────────────────────────────────────────────────────────

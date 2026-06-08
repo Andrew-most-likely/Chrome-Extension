@@ -10,6 +10,26 @@ const PROXY_URL = CONFIG.PROXY_URL;
 // URL HEURISTICS
 // ============================================================
 
+// Shared list of common two-part ccTLD suffixes.
+// Used by getRegistrable() and the fake-TLD heuristic so both stay consistent.
+const TWO_PART_TLDS = [
+  "co.uk", "co.au", "co.nz", "co.za", "co.in", "co.jp", "co.kr", "co.id",
+  "com.au", "com.br", "com.mx", "com.ar", "com.tr", "com.sg", "com.hk",
+  "org.uk", "net.au", "gov.uk", "ac.uk", "me.uk",
+];
+
+// Returns the registrable domain (eTLD+1), handling common two-part ccTLDs
+// so that paypal.co.uk, amazon.com.au etc. are not falsely flagged.
+function getRegistrable(hostname) {
+  const parts = hostname.split(".");
+  if (parts.length < 2) return hostname;
+  const lastTwo = parts.slice(-2).join(".");
+  if (TWO_PART_TLDS.includes(lastTwo) && parts.length >= 3) {
+    return parts.slice(-3).join(".");
+  }
+  return lastTwo;
+}
+
 function runHeuristics(url) {
   let parsed;
   try { parsed = new URL(url); } catch (_) { return null; }
@@ -21,12 +41,14 @@ function runHeuristics(url) {
     if (/^127\./.test(hostname)) return null;           // 127.x.x.x loopback
     if (/^10\./.test(hostname)) return null;            // 10.x.x.x private
     if (/^192\.168\./.test(hostname)) return null;      // 192.168.x.x private
-    if (/^172\.(1[6-9]|2\d|3[01])\./.test(hostname)) return null; // 172.16–31.x.x private
+    if (/^172\.(1[6-9]|2\d|3[01])\./.test(hostname)) return null; // 172.16-31.x.x private
     return "HEURISTIC";
   }
 
-  // @ symbol trick (e.g. https://legit.com@evil.com)
-  if (parsed.href.includes("@")) return "HEURISTIC";
+  // @ symbol trick (e.g. https://paypal.com@evil.com).
+  // Check parsed.username/password only - not parsed.href which also contains
+  // query strings that may legitimately include email addresses.
+  if (parsed.username || parsed.password) return "HEURISTIC";
 
   // Punycode / IDN homograph
   if (hostname.includes("xn--")) return "HEURISTIC";
@@ -35,22 +57,25 @@ function runHeuristics(url) {
   const highRiskTlds = [".tk", ".ml", ".ga", ".cf", ".gq", ".top", ".buzz", ".click"];
   if (highRiskTlds.some((tld) => hostname.endsWith(tld))) return "HEURISTIC";
 
-  // Fake TLD buried inside subdomain - e.g. paypal.com.attacker.net
-  // Legitimate hostnames never have a real TLD in the middle of their labels.
-  if (/\.(com|net|org|gov|edu)\./.test(hostname)) return "HEURISTIC";
+  // Fake TLD buried inside subdomain - e.g. paypal.com.attacker.net.
+  // Skip if the hostname ends with a legitimate two-part ccTLD suffix:
+  // google.com.au has .com. in it but is not an attack pattern.
+  if (/\.(com|net|org|gov|edu)\./.test(hostname)) {
+    if (!TWO_PART_TLDS.some((tld) => hostname.endsWith("." + tld))) return "HEURISTIC";
+  }
 
   // Number-substitution lookalikes
   const numberFakes = ["paypa1", "amaz0n", "g00gle", "faceb00k", "micros0ft", "app1e", "netf1ix"];
   if (numberFakes.some((fake) => hostname.includes(fake))) return "HEURISTIC";
 
-  // Brand name in subdomain but not the registrable domain
+  // Brand name in subdomain but not the registrable domain.
+  // Use getRegistrable() to correctly handle ccTLDs like .co.uk, .com.au.
   const brands = [
     "paypal", "amazon", "google", "facebook", "microsoft", "apple",
     "netflix", "instagram", "twitter", "whatsapp", "chase", "wellsfargo",
     "citibank", "bankofamerica",
   ];
-  const parts = hostname.split(".");
-  const registrable = parts.slice(-2).join(".");
+  const registrable = getRegistrable(hostname);
   for (const brand of brands) {
     if (hostname.includes(brand) && !registrable.includes(brand)) return "HEURISTIC";
   }

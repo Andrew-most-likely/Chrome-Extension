@@ -47,7 +47,7 @@
         locDesc.set.call(this, url);
       },
       get: locDesc.get,
-      configurable: true,
+      configurable: false,  // prevent page scripts from re-overriding this setter
     });
   }
 
