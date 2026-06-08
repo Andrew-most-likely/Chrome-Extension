@@ -173,6 +173,38 @@
     }
     .remove-btn:hover { background: #f1f3f4; color: #c5221f; }
 
+    .whitelist-add {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 6px;
+    }
+    .whitelist-add input {
+      flex: 1;
+      font-size: 11px;
+      font-family: inherit;
+      padding: 4px 7px;
+      border: 1px solid #e8eaed;
+      border-radius: 4px;
+      color: #202124;
+      outline: none;
+      min-width: 0;
+    }
+    .whitelist-add input:focus { border-color: #1a73e8; }
+    .whitelist-add input::placeholder { color: #9aa0a6; }
+    .whitelist-add button {
+      flex-shrink: 0;
+      font-size: 11px;
+      font-weight: 600;
+      font-family: inherit;
+      padding: 4px 10px;
+      background: #1a73e8;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .whitelist-add button:hover { background: #1765cc; }
+
     footer {
       padding: 8px 16px;
       font-size: 10px;
@@ -231,6 +263,10 @@
 
   <div class="section">
     <div class="section-title">Whitelisted domains</div>
+    <div class="whitelist-add">
+      <input type="text" id="whitelist-input" placeholder="example.com" autocomplete="off" spellcheck="false" />
+      <button id="whitelist-add-btn">Add</button>
+    </div>
     <ul class="whitelist-list" id="whitelist-list">
       <li class="empty-state" style="list-style:none;padding:4px 0 8px">None</li>
     </ul>

@@ -121,3 +121,39 @@ chrome.runtime.sendMessage({ type: "GET_STATS" }, (response) => {
   }
   render(response);
 });
+
+// ── Whitelist add ──
+function addWhitelistEntry() {
+  const input = document.getElementById("whitelist-input");
+  let value = input.value.trim()
+    .replace(/^https?:\/\//i, "")  // strip protocol if typed
+    .replace(/\/.*$/, "")           // strip path
+    .toLowerCase();
+
+  if (!value) return;
+
+  chrome.runtime.sendMessage({ type: "ADD_WHITELIST", url: "https://" + value }, () => {
+    if (chrome.runtime.lastError) return;
+    input.value = "";
+
+    const list = document.getElementById("whitelist-list");
+    const empty = list.querySelector(".empty-state");
+    if (empty) empty.remove();
+
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <span class="list-text" title="${value}">${value}</span>
+      <button class="remove-btn" data-type="whitelist" data-value="${value}">✕</button>`;
+    li.querySelector(".remove-btn").addEventListener("click", () => {
+      chrome.runtime.sendMessage({ type: "REMOVE_WHITELIST", hostname: value }, () => {
+        li.remove();
+      });
+    });
+    list.appendChild(li);
+  });
+}
+
+document.getElementById("whitelist-add-btn").addEventListener("click", addWhitelistEntry);
+document.getElementById("whitelist-input").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") addWhitelistEntry();
+});
