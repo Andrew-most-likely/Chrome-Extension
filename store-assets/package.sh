@@ -8,21 +8,14 @@
 
 set -e
 
-VERSION=$(grep '"version"' manifest.json | grep -oP '"\d+\.\d+\.\d+"' | tr -d '"')
+VERSION=$(grep '"version"' extension/manifest.json | grep -oP '"\d+\.\d+\.\d+"' | tr -d '"')
 OUTPUT="phishing-detector-v${VERSION}.zip"
 
 echo "Building $OUTPUT ..."
 
-zip -r "$OUTPUT" . \
-  --exclude "*.git*" \
-  --exclude "config.js" \
-  --exclude "store-assets/*" \
-  --exclude "site/*" \
-  --exclude "hello.html" \
-  --exclude "hello_extensions.png" \
-  --exclude "generate-icons.html" \
-  --exclude "*.zip" \
-  --exclude "*.sh"
+zip -r "$OUTPUT" extension/ \
+  --exclude "extension/config.js" \
+  --exclude "*.zip"
 
 echo "Done. Submit $OUTPUT to:"
 echo "https://chrome.google.com/webstore/devconsole"
