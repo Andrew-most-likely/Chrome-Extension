@@ -1,7 +1,8 @@
 // Vercel serverless function — Safe Browsing proxy
 // The API key lives in Vercel environment variables, never in extension code.
 
-const SAFE_BROWSING_URL = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${process.env.SAFE_BROWSING_API_KEY}`;
+const apiKey = process.env.GSB_TOKEN;
+const SAFE_BROWSING_URL = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${apiKey}`;
 
 const THREAT_TYPES = [
   "MALWARE",
@@ -29,8 +30,8 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "url is required" });
   }
 
-  if (!process.env.SAFE_BROWSING_API_KEY) {
-    return res.status(500).json({ error: "API key not configured" });
+  if (!apiKey) {
+    return res.status(500).json({ error: "Token not configured" });
   }
 
   try {
