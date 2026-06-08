@@ -1,8 +1,5 @@
 // ============================================================
 // CONFIGURATION
-// Proxy URL lives in config.js (gitignored). Copy config.example.js
-// to config.js and fill in your Vercel deployment URL.
-// The actual API key is stored in Vercel environment variables.
 // ============================================================
 
 importScripts("config.js");
@@ -138,7 +135,7 @@ chrome.webNavigation.onCommitted.addListener((details) => {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // Content script detected a payment redirect in inline scripts
   if (message.type === "PAYMENT_REDIRECT_DETECTED") {
-    const { url, detail } = message;
+    const { sourceUrl, redirectUrl, detail } = message;
     const tabId = sender.tab?.id;
 
     if (!tabId) {
@@ -146,13 +143,17 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       return false;
     }
 
-    isBypassed(url).then((bypassed) => {
+    // Bypass is keyed on the source page — if the user already allowed this
+    // page to redirect, let it through
+    isBypassed(sourceUrl).then((bypassed) => {
       if (bypassed) {
         sendResponse({ status: "bypassed" });
         return;
       }
       incrementBlockedCount();
-      const warningUrl = buildWarningUrl(url, "PAYMENT_REDIRECT", "contentscript", detail);
+      // Use redirectUrl as the warning page's url param so "Proceed anyway"
+      // navigates directly to the destination instead of looping back to source
+      const warningUrl = buildWarningUrl(redirectUrl, "PAYMENT_REDIRECT", "contentscript", detail);
       chrome.tabs.update(tabId, { url: warningUrl });
       sendResponse({ status: "redirected" });
     });

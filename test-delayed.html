@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>Test: Delayed redirect</title></head>
+<body>
+  <h1>Delayed Redirect Test</h1>
+  <p>Redirect fires after 2 seconds — simulates a page that loads content first then redirects.</p>
+  <script>
+    setTimeout(function () {
+      window.location.href = "https://coinbase.com/pay";
+    }, 2000);
+  </script>
+</body>
+</html>

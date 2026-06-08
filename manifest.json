@@ -23,15 +23,16 @@
   "content_scripts": [
     {
       "matches": ["https://*/*", "http://*/*"],
+      "js": ["interceptor.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["https://*/*", "http://*/*"],
       "js": ["content.js"],
-      "run_at": "document_idle"
+      "run_at": "document_start"
     }
   ],
-
-  "action": {
-    "default_popup": "popup.html",
-    "default_icon": "hello_extensions.png"
-  },
 
   "web_accessible_resources": [
     {
