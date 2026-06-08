@@ -1,2 +1,4 @@
 config.js
 *.zip
+extension.crx
+extension.pem
