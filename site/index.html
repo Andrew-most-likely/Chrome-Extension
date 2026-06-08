@@ -3,203 +3,380 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Phishing Detector — Real-time browser protection</title>
+  <title>Phishing Detector — Real-Time Browser Protection</title>
+  <meta name="description" content="Phishing Detector checks every site you visit against Google's Safe Browsing database and scans for malicious payment redirect scripts — before they can harm you. Free Chrome extension." />
+  <meta name="theme-color" content="#1a73e8" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Phishing Detector — Real-Time Browser Protection" />
+  <meta property="og:description" content="Free Chrome extension that blocks phishing sites and payment redirect scams in real time." />
+  <meta property="og:image" content="og-image.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Phishing Detector — Real-Time Browser Protection" />
+  <meta name="twitter:description" content="Free Chrome extension that blocks phishing sites and payment redirect scams in real time." />
+
+  <link rel="stylesheet" href="style.css" />
+
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: #fff;
-      color: #202124;
-    }
-
-    /* Nav */
-    nav {
-      background: #1a73e8;
-      color: #fff;
-      padding: 0 40px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 18px;
-      font-weight: 600;
-      text-decoration: none;
-      color: #fff;
-    }
-    .nav-links { display: flex; gap: 24px; }
-    .nav-links a {
-      color: rgba(255,255,255,0.85);
-      text-decoration: none;
-      font-size: 14px;
-      transition: color 0.15s;
-    }
-    .nav-links a:hover { color: #fff; }
-
-    /* Hero */
+    /* ── Hero ───────────────────────────────────────────── */
     .hero {
-      background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
-      color: #fff;
+      background: linear-gradient(145deg, #1557b0 0%, #1a73e8 100%);
+      color: var(--white);
       text-align: center;
-      padding: 80px 40px 100px;
+      padding: 96px 24px 112px;
     }
-    .hero .icon { font-size: 72px; margin-bottom: 24px; display: block; }
-    .hero h1 { font-size: 42px; font-weight: 700; line-height: 1.2; margin-bottom: 16px; }
-    .hero p {
-      font-size: 18px;
-      opacity: 0.9;
-      max-width: 560px;
-      margin: 0 auto 36px;
-      line-height: 1.6;
-    }
-    .btn-cta {
-      display: inline-block;
-      background: #fff;
-      color: #1a73e8;
-      font-size: 15px;
-      font-weight: 600;
-      padding: 14px 32px;
-      border-radius: 6px;
-      text-decoration: none;
-      transition: box-shadow 0.15s;
-    }
-    .btn-cta:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .hero-inner { max-width: 680px; margin: 0 auto; }
 
-    /* Features */
-    .features {
-      max-width: 960px;
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -.02em;
+      margin-bottom: 20px;
+    }
+    .hero h1 span { opacity: .85; }
+
+    .hero-desc {
+      font-size: clamp(16px, 2.5vw, 19px);
+      opacity: .88;
+      line-height: 1.65;
+      margin: 0 auto 40px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--white);
+      color: var(--blue-600);
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      box-shadow: var(--shadow-md);
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .btn-primary:hover { box-shadow: var(--shadow-lg); }
+
+    .hero-note {
+      font-size: 13px;
+      opacity: .7;
+      margin-top: 20px;
+    }
+
+    /* ── Features ───────────────────────────────────────── */
+    .features-section {
+      padding: 88px 24px;
+    }
+    .section-title {
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      text-align: center;
+      color: var(--gray-900);
+      margin-bottom: 48px;
+    }
+
+    .features-grid {
+      max-width: 1000px;
       margin: 0 auto;
-      padding: 80px 40px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 40px;
+      gap: 24px;
     }
-    .feature { text-align: center; }
-    .feature .feat-icon { font-size: 40px; margin-bottom: 16px; display: block; }
-    .feature h3 { font-size: 18px; font-weight: 600; margin-bottom: 10px; }
-    .feature p { font-size: 14px; color: #5f6368; line-height: 1.6; }
 
-    /* How it works */
-    .how {
-      background: #f8f9fa;
-      padding: 80px 40px;
-      text-align: center;
+    .feature-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
     }
-    .how h2 { font-size: 28px; font-weight: 600; margin-bottom: 48px; }
-    .steps {
-      max-width: 800px;
+    .feature-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--blue-100);
+    }
+
+    .feat-icon-wrap {
+      width: 52px; height: 52px;
+      background: var(--blue-50);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .feat-icon-wrap svg { color: var(--blue-600); }
+
+    .feature-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 10px;
+      letter-spacing: -.01em;
+    }
+    .feature-card p {
+      font-size: 14px;
+      color: var(--gray-600);
+      line-height: 1.65;
+    }
+
+    /* ── How it works ───────────────────────────────────── */
+    .how-section {
+      background: var(--gray-50);
+      border-top: 1px solid var(--gray-200);
+      border-bottom: 1px solid var(--gray-200);
+      padding: 88px 24px;
+    }
+
+    .steps-grid {
+      max-width: 880px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
       gap: 32px;
     }
+
     .step { text-align: center; }
     .step-num {
       width: 48px; height: 48px;
       border-radius: 50%;
-      background: #1a73e8;
-      color: #fff;
-      font-size: 20px;
+      background: var(--blue-600);
+      color: var(--white);
+      font-size: 18px;
       font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
       margin: 0 auto 16px;
     }
-    .step h4 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
-    .step p  { font-size: 13px; color: #5f6368; line-height: 1.5; }
-
-    /* Footer */
-    footer {
-      text-align: center;
-      padding: 32px 40px;
-      font-size: 13px;
-      color: #9aa0a6;
-      border-top: 1px solid #e8eaed;
+    .step h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+      letter-spacing: -.01em;
     }
-    footer a { color: #1a73e8; text-decoration: none; margin: 0 12px; }
-    footer a:hover { text-decoration: underline; }
+    .step p {
+      font-size: 13px;
+      color: var(--gray-600);
+      line-height: 1.6;
+    }
+
+    /* ── Responsive tweaks ──────────────────────────────── */
+    @media (max-width: 640px) {
+      .hero { padding: 72px 20px 88px; }
+    }
   </style>
 </head>
 <body>
 
-  <nav>
-    <a class="nav-brand" href="index.html">🛡️ Phishing Detector</a>
-    <div class="nav-links">
-      <a href="privacy.html">Privacy Policy</a>
-      <a href="terms.html">Terms of Service</a>
-    </div>
-  </nav>
+<a class="skip-link" href="#main">Skip to content</a>
 
-  <section class="hero">
-    <span class="icon">🛡️</span>
-    <h1>Browse Safely.<br>Block Phishing in Real Time.</h1>
-    <p>
-      Phishing Detector checks every site you visit against Google's Safe Browsing database
-      and scans for suspicious payment redirect scripts — before they can harm you.
-    </p>
-    <a href="#" class="btn-cta">Add to Chrome — It's Free</a>
-  </section>
+<nav class="site-nav" role="navigation" aria-label="Main navigation">
+  <a class="nav-brand" href="index.html" aria-label="Phishing Detector home">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+    </svg>
+    Phishing Detector
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-links">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+    </svg>
+  </button>
+  <div class="nav-links" id="nav-links" role="list">
+    <a href="privacy.html" role="listitem">Privacy Policy</a>
+    <a href="terms.html" role="listitem">Terms of Service</a>
+  </div>
+</nav>
 
-  <section class="features">
-    <div class="feature">
-      <span class="feat-icon">🔍</span>
-      <h3>Google Safe Browsing</h3>
-      <p>Every URL you visit is checked against Google's continuously updated database of known phishing, malware, and social engineering sites.</p>
-    </div>
-    <div class="feature">
-      <span class="feat-icon">💳</span>
-      <h3>Payment Redirect Detection</h3>
-      <p>Inline scripts that attempt to silently redirect you to payment services like PayPal, Stripe, or cryptocurrency platforms are caught and flagged.</p>
-    </div>
-    <div class="feature">
-      <span class="feat-icon">⚡</span>
-      <h3>Instant Warning Page</h3>
-      <p>When a threat is detected, you're shown a clear warning page explaining why the site was blocked — just like Chrome's built-in security warnings.</p>
-    </div>
-    <div class="feature">
-      <span class="feat-icon">🔓</span>
-      <h3>You Stay in Control</h3>
-      <p>If you trust a flagged site, you can choose to proceed anyway. Your decision is remembered for the session so you won't be interrupted again.</p>
-    </div>
-  </section>
+<main id="main">
 
-  <section class="how">
-    <h2>How It Works</h2>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <h4>You navigate to a site</h4>
-        <p>The extension intercepts every top-level page navigation in your browser.</p>
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="hero-inner">
+      <div class="hero-badge" aria-label="Status: Active protection">
+        <span class="hero-badge-dot" aria-hidden="true"></span>
+        Active protection — free &amp; open source
       </div>
-      <div class="step">
-        <div class="step-num">2</div>
+      <h1 id="hero-heading">
+        Browse Safely.<br>
+        <span>Block Phishing in Real Time.</span>
+      </h1>
+      <p class="hero-desc">
+        Phishing Detector checks every site you visit against Google's Safe Browsing database
+        and scans for suspicious payment redirect scripts — before they can harm you.
+      </p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+          </svg>
+          Add to Chrome — It's Free
+        </a>
+      </div>
+      <p class="hero-note">No account required &nbsp;·&nbsp; No data collected &nbsp;·&nbsp; Open source</p>
+    </div>
+  </section>
+
+  <!-- Trust bar -->
+  <div class="trust-bar" aria-label="Key facts">
+    <div class="trust-bar-inner">
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+        Powered by Google Safe Browsing
+      </div>
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+        Zero personal data collected
+      </div>
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+        Free &amp; open source on GitHub
+      </div>
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        Scans run locally on your device
+      </div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <section class="features-section" aria-labelledby="features-heading">
+    <p class="section-label" aria-hidden="true">What it does</p>
+    <h2 class="section-title" id="features-heading">Complete phishing defence in one extension</h2>
+    <p class="section-sub">Four layers of protection working silently in the background every time you open a new page.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feat-icon-wrap" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        </div>
+        <h3>Google Safe Browsing</h3>
+        <p>Every URL is checked against Google's continuously updated database of known phishing, malware, and social engineering sites before the page loads.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feat-icon-wrap" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+        </div>
+        <h3>Payment Redirect Detection</h3>
+        <p>Inline scripts that silently redirect you to PayPal, Stripe, crypto platforms, or other payment services are caught and flagged before they execute.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feat-icon-wrap" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        </div>
+        <h3>Instant Warning Page</h3>
+        <p>When a threat is detected, you see a clear, Chrome-style warning page explaining exactly why the site was blocked — before anything renders.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feat-icon-wrap" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+        </div>
+        <h3>You Stay in Control</h3>
+        <p>If you trust a flagged site, choose "Proceed anyway." Your decision is remembered for the session so you aren't interrupted again on the same page.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="how-section" aria-labelledby="how-heading">
+    <p class="section-label" aria-hidden="true">The process</p>
+    <h2 class="section-title" id="how-heading">How It Works</h2>
+    <p class="section-sub">Four steps that happen in milliseconds, invisibly, on every page you visit.</p>
+
+    <div class="steps-grid" role="list">
+      <div class="step" role="listitem">
+        <div class="step-num" aria-hidden="true">1</div>
+        <h4>You navigate to a site</h4>
+        <p>The extension intercepts every top-level page navigation automatically.</p>
+      </div>
+      <div class="step" role="listitem">
+        <div class="step-num" aria-hidden="true">2</div>
         <h4>URL is checked</h4>
         <p>The URL is submitted to the Google Safe Browsing API and checked for known threats.</p>
       </div>
-      <div class="step">
-        <div class="step-num">3</div>
+      <div class="step" role="listitem">
+        <div class="step-num" aria-hidden="true">3</div>
         <h4>Scripts are scanned</h4>
-        <p>Inline JavaScript is analyzed for redirect patterns pointing to payment services.</p>
+        <p>Inline JavaScript is analysed on-device for redirect patterns targeting payment services.</p>
       </div>
-      <div class="step">
-        <div class="step-num">4</div>
+      <div class="step" role="listitem">
+        <div class="step-num" aria-hidden="true">4</div>
         <h4>You're warned or protected</h4>
         <p>If a threat is found, you see a blocking warning page with the full reason before anything loads.</p>
       </div>
     </div>
   </section>
 
-  <footer>
-    &copy; 2026 Phishing Detector &mdash;
-    <a href="privacy.html">Privacy Policy</a>
-    <a href="terms.html">Terms of Service</a>
-  </footer>
+  <!-- CTA band -->
+  <section class="cta-band" aria-labelledby="cta-heading">
+    <h2 id="cta-heading">Ready to browse more safely?</h2>
+    <p>Install in seconds. No sign-up, no subscription, no data collection.</p>
+    <a href="#" class="btn-primary" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+      </svg>
+      Add to Chrome — It's Free
+    </a>
+  </section>
+
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner">
+    <div>
+      <a class="footer-brand" href="index.html">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+        </svg>
+        Phishing Detector
+      </a>
+      <p class="footer-tagline">Free, open-source browser protection powered by Google Safe Browsing.</p>
+    </div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <p class="footer-links-title">Legal</p>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Phishing Detector. All rights reserved.</span>
+    <span>Built to keep you safe online.</span>
+  </div>
+</footer>
+
+<script>
+  // Mobile nav toggle
+  const toggle = document.querySelector('.nav-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  toggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  // Close on outside click
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.site-nav')) {
+      navLinks.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+</script>
 
 </body>
 </html>

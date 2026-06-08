@@ -1,9 +1,12 @@
 // ============================================================
-// CONFIGURATION — replace with your Google Safe Browsing API key
-// Get one at: https://console.cloud.google.com (enable "Safe Browsing API")
+// CONFIGURATION
+// API key lives in config.js (gitignored). Copy config.example.js
+// to config.js and add your key before loading the extension.
 // ============================================================
 
-const SAFE_BROWSING_API_KEY = "YOUR_API_KEY_HERE";
+importScripts("config.js");
+
+const SAFE_BROWSING_API_KEY = CONFIG.SAFE_BROWSING_API_KEY;
 const SAFE_BROWSING_URL = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${SAFE_BROWSING_API_KEY}`;
 
 const THREAT_TYPES = [

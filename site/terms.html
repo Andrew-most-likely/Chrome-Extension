@@ -4,219 +4,201 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Terms of Service — Phishing Detector</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: #fff;
-      color: #202124;
-    }
-
-    nav {
-      background: #1a73e8;
-      color: #fff;
-      padding: 0 40px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 18px;
-      font-weight: 600;
-      text-decoration: none;
-      color: #fff;
-    }
-    .nav-links { display: flex; gap: 24px; }
-    .nav-links a {
-      color: rgba(255,255,255,0.85);
-      text-decoration: none;
-      font-size: 14px;
-    }
-    .nav-links a:hover { color: #fff; }
-
-    .page-header {
-      background: #f8f9fa;
-      border-bottom: 1px solid #e8eaed;
-      padding: 48px 40px 36px;
-      text-align: center;
-    }
-    .page-header h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
-    .page-header p  { font-size: 14px; color: #5f6368; }
-
-    .content {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 60px 40px 80px;
-    }
-
-    h2 {
-      font-size: 20px;
-      font-weight: 600;
-      margin: 40px 0 12px;
-      color: #202124;
-    }
-    h2:first-child { margin-top: 0; }
-
-    p, li {
-      font-size: 15px;
-      color: #3c4043;
-      line-height: 1.7;
-      margin-bottom: 12px;
-    }
-    ul {
-      list-style: disc;
-      padding-left: 24px;
-      margin-bottom: 12px;
-    }
-    li { margin-bottom: 6px; }
-
-    .warning-box {
-      background: #fce8e6;
-      border-left: 4px solid #c5221f;
-      border-radius: 0 4px 4px 0;
-      padding: 16px 20px;
-      margin: 24px 0;
-    }
-    .warning-box p { margin-bottom: 0; color: #b31412; font-weight: 500; }
-
-    footer {
-      text-align: center;
-      padding: 32px 40px;
-      font-size: 13px;
-      color: #9aa0a6;
-      border-top: 1px solid #e8eaed;
-    }
-    footer a { color: #1a73e8; text-decoration: none; margin: 0 12px; }
-    footer a:hover { text-decoration: underline; }
-  </style>
+  <meta name="description" content="Terms of Service for the Phishing Detector Chrome extension. Read our usage terms, disclaimers, and limitations of liability." />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#1a73e8" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <nav>
-    <a class="nav-brand" href="index.html">🛡️ Phishing Detector</a>
-    <div class="nav-links">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="site-nav" role="navigation" aria-label="Main navigation">
+  <a class="nav-brand" href="index.html" aria-label="Phishing Detector home">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+    </svg>
+    Phishing Detector
+  </a>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-links">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+    </svg>
+  </button>
+  <div class="nav-links" id="nav-links" role="list">
+    <a href="privacy.html" role="listitem">Privacy Policy</a>
+    <a href="terms.html" aria-current="page" role="listitem">Terms of Service</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Terms of Service</h1>
+  <p class="meta">Last updated: <time datetime="2026-06-08">June 8, 2026</time></p>
+</div>
+
+<main id="main">
+  <div class="legal-layout">
+
+    <!-- Table of contents -->
+    <aside class="toc" aria-label="Table of contents">
+      <p class="toc-title">Contents</p>
+      <ol>
+        <li><a href="#acceptance">1. Acceptance of Terms</a></li>
+        <li><a href="#description">2. Description of Service</a></li>
+        <li><a href="#no-guarantee">3. No Guarantee of Protection</a></li>
+        <li><a href="#third-party">4. Third-Party Services</a></li>
+        <li><a href="#permitted-use">5. Permitted Use</a></li>
+        <li><a href="#warranties">6. Disclaimer of Warranties</a></li>
+        <li><a href="#liability">7. Limitation of Liability</a></li>
+        <li><a href="#proceed-anyway">8. "Proceed Anyway" Feature</a></li>
+        <li><a href="#updates">9. Updates and Changes</a></li>
+        <li><a href="#termination">10. Termination</a></li>
+        <li><a href="#governing-law">11. Governing Law</a></li>
+        <li><a href="#contact">12. Contact</a></li>
+      </ol>
+    </aside>
+
+    <article class="legal-content" aria-label="Terms of Service content">
+
+      <h2 id="acceptance">1. Acceptance of Terms</h2>
+      <p>
+        By installing or using the Phishing Detector browser extension ("the Extension"),
+        you agree to be bound by these Terms of Service. If you do not agree, please
+        uninstall the Extension.
+      </p>
+
+      <h2 id="description">2. Description of Service</h2>
+      <p>
+        Phishing Detector is a free browser extension that helps protect users from phishing
+        websites, malware, and malicious payment redirects by:
+      </p>
+      <ul>
+        <li>Checking URLs against the Google Safe Browsing API</li>
+        <li>Scanning inline scripts for suspicious payment redirect patterns</li>
+        <li>Displaying warning pages when threats are detected</li>
+      </ul>
+
+      <h2 id="no-guarantee">3. No Guarantee of Protection</h2>
+      <div class="warning-box" role="note">
+        <p>
+          <strong>Important:</strong> The Extension is a security aid, not an absolute guarantee.
+          New phishing sites are created constantly. No security tool can catch 100% of threats.
+        </p>
+      </div>
+      <p>
+        The Extension relies on Google's Safe Browsing database, which may not include
+        newly created phishing sites. Detection accuracy for payment redirect scripts
+        depends on whether the malicious code is inline and matches known patterns.
+        Always exercise your own judgement when browsing.
+      </p>
+
+      <h2 id="third-party">4. Use of Third-Party Services</h2>
+      <p>
+        The Extension uses the Google Safe Browsing API. Your use of this feature is
+        also subject to Google's
+        <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer">Terms of Service</a>
+        and the Safe Browsing
+        <a href="https://developers.google.com/safe-browsing/terms" target="_blank" rel="noopener noreferrer">API Terms</a>.
+      </p>
+
+      <h2 id="permitted-use">5. Permitted Use</h2>
+      <p>You may use the Extension for personal, non-commercial browsing protection. You may not:</p>
+      <ul>
+        <li>Reverse engineer, decompile, or modify the Extension to bypass its safety warnings</li>
+        <li>Use the Extension to harass, harm, or defraud others</li>
+        <li>Redistribute the Extension under a different name or identity without permission</li>
+      </ul>
+
+      <h2 id="warranties">6. Disclaimer of Warranties</h2>
+      <p>
+        The Extension is provided <strong>"as is"</strong> without warranty of any kind,
+        express or implied. We do not warrant that the Extension will be error-free,
+        uninterrupted, or free from security vulnerabilities.
+      </p>
+
+      <h2 id="liability">7. Limitation of Liability</h2>
+      <p>
+        To the fullest extent permitted by law, we shall not be liable for any indirect,
+        incidental, special, or consequential damages arising from your use of the Extension,
+        including but not limited to damages resulting from a phishing attack that the
+        Extension failed to detect.
+      </p>
+
+      <h2 id="proceed-anyway">8. "Proceed Anyway" Feature</h2>
+      <p>
+        The Extension allows users to bypass a warning and visit a flagged site at their
+        own risk. By clicking "Proceed anyway", you acknowledge that you are overriding a
+        security warning and take full responsibility for any resulting harm.
+      </p>
+
+      <h2 id="updates">9. Updates and Changes</h2>
+      <p>
+        We reserve the right to update the Extension and these Terms at any time.
+        Continued use of the Extension after updates constitutes acceptance of the
+        revised Terms. We will update the "Last updated" date at the top of this page
+        when changes are made.
+      </p>
+
+      <h2 id="termination">10. Termination</h2>
+      <p>
+        You may stop using the Extension at any time by uninstalling it from your browser.
+        We may discontinue the Extension at any time without notice.
+      </p>
+
+      <h2 id="governing-law">11. Governing Law</h2>
+      <p>
+        These Terms shall be governed by and construed in accordance with the laws of
+        the jurisdiction in which the developer resides, without regard to conflict of
+        law principles.
+      </p>
+
+      <h2 id="contact">12. Contact</h2>
+      <p>
+        For questions about these Terms, please open an issue on our GitHub repository
+        or contact us at the email address listed on the Chrome Web Store listing.
+      </p>
+
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner">
+    <div>
+      <a class="footer-brand" href="index.html">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+        </svg>
+        Phishing Detector
+      </a>
+      <p class="footer-tagline">Free, open-source browser protection powered by Google Safe Browsing.</p>
+    </div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <p class="footer-links-title">Legal</p>
       <a href="privacy.html">Privacy Policy</a>
       <a href="terms.html">Terms of Service</a>
-    </div>
-  </nav>
-
-  <div class="page-header">
-    <h1>Terms of Service</h1>
-    <p>Last updated: June 8, 2026</p>
+    </nav>
   </div>
-
-  <div class="content">
-
-    <h2>1. Acceptance of Terms</h2>
-    <p>
-      By installing or using the Phishing Detector browser extension ("the Extension"),
-      you agree to be bound by these Terms of Service. If you do not agree, please
-      uninstall the Extension.
-    </p>
-
-    <h2>2. Description of Service</h2>
-    <p>
-      Phishing Detector is a free browser extension that helps protect users from phishing
-      websites, malware, and malicious payment redirects by:
-    </p>
-    <ul>
-      <li>Checking URLs against the Google Safe Browsing API</li>
-      <li>Scanning inline scripts for suspicious payment redirect patterns</li>
-      <li>Displaying warning pages when threats are detected</li>
-    </ul>
-
-    <h2>3. No Guarantee of Protection</h2>
-    <div class="warning-box">
-      <p>
-        ⚠ The Extension is a security aid, not an absolute guarantee. New phishing sites
-        are created constantly. No security tool can catch 100% of threats.
-      </p>
-    </div>
-    <p>
-      The Extension relies on Google's Safe Browsing database, which may not include
-      newly created phishing sites. Detection accuracy for payment redirect scripts
-      depends on whether the malicious code is inline and matches known patterns.
-      Always exercise your own judgement when browsing.
-    </p>
-
-    <h2>4. Use of Third-Party Services</h2>
-    <p>
-      The Extension uses the Google Safe Browsing API. Your use of this feature is
-      also subject to Google's
-      <a href="https://policies.google.com/terms" target="_blank" rel="noopener">Terms of Service</a>
-      and the Safe Browsing
-      <a href="https://developers.google.com/safe-browsing/terms" target="_blank" rel="noopener">API Terms</a>.
-    </p>
-
-    <h2>5. Permitted Use</h2>
-    <p>You may use the Extension for personal, non-commercial browsing protection. You may not:</p>
-    <ul>
-      <li>Reverse engineer, decompile, or modify the Extension to bypass its safety warnings</li>
-      <li>Use the Extension to harass, harm, or defraud others</li>
-      <li>Redistribute the Extension under a different name or identity without permission</li>
-    </ul>
-
-    <h2>6. Disclaimer of Warranties</h2>
-    <p>
-      The Extension is provided <strong>"as is"</strong> without warranty of any kind,
-      express or implied. We do not warrant that the Extension will be error-free,
-      uninterrupted, or free from security vulnerabilities.
-    </p>
-
-    <h2>7. Limitation of Liability</h2>
-    <p>
-      To the fullest extent permitted by law, we shall not be liable for any indirect,
-      incidental, special, or consequential damages arising from your use of the Extension,
-      including but not limited to damages resulting from a phishing attack that the
-      Extension failed to detect.
-    </p>
-
-    <h2>8. "Proceed Anyway" Feature</h2>
-    <p>
-      The Extension allows users to bypass a warning and visit a flagged site at their
-      own risk. By clicking "Proceed anyway", you acknowledge that you are overriding a
-      security warning and take full responsibility for any resulting harm.
-    </p>
-
-    <h2>9. Updates and Changes</h2>
-    <p>
-      We reserve the right to update the Extension and these Terms at any time.
-      Continued use of the Extension after updates constitutes acceptance of the
-      revised Terms. We will update the "Last updated" date at the top of this page
-      when changes are made.
-    </p>
-
-    <h2>10. Termination</h2>
-    <p>
-      You may stop using the Extension at any time by uninstalling it from your browser.
-      We may discontinue the Extension at any time without notice.
-    </p>
-
-    <h2>11. Governing Law</h2>
-    <p>
-      These Terms shall be governed by and construed in accordance with the laws of
-      the jurisdiction in which the developer resides, without regard to conflict of
-      law principles.
-    </p>
-
-    <h2>12. Contact</h2>
-    <p>
-      For questions about these Terms, please open an issue on our GitHub repository
-      or contact us at the email address listed on the Chrome Web Store listing.
-    </p>
-
+  <div class="footer-bottom">
+    <span>&copy; 2026 Phishing Detector. All rights reserved.</span>
+    <a href="index.html" style="color:rgba(255,255,255,.5);text-decoration:none;font-size:13px;">&larr; Back to home</a>
   </div>
+</footer>
 
-  <footer>
-    &copy; 2026 Phishing Detector &mdash;
-    <a href="index.html">Home</a>
-    <a href="privacy.html">Privacy Policy</a>
-  </footer>
+<script>
+  const toggle = document.querySelector('.nav-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  toggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.site-nav')) {
+      navLinks.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+</script>
 
 </body>
 </html>
