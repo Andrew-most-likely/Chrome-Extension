@@ -152,6 +152,29 @@
 
   </div>
 
+  <p class="section-title">Safe Browsing API tests — should block</p>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-top"><span class="badge badge-block">Block</span><h3>Malware</h3></div>
+      <p>Proxy returns a <code>MALWARE</code> threat for this URL. Tests the full Safe Browsing → warning page pipeline.</p>
+      <a href="pd-test-malware.html" target="_blank" class="link-block">Run test →</a>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="badge badge-block">Block</span><h3>Phishing / Social Engineering</h3></div>
+      <p>Proxy returns a <code>SOCIAL_ENGINEERING</code> threat. Should show the phishing-specific warning message.</p>
+      <a href="pd-test-phishing.html" target="_blank" class="link-block">Run test →</a>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="badge badge-block">Block</span><h3>Unwanted Software</h3></div>
+      <p>Proxy returns an <code>UNWANTED_SOFTWARE</code> threat. Should show the unwanted software warning message.</p>
+      <a href="pd-test-unwanted.html" target="_blank" class="link-block">Run test →</a>
+    </div>
+
+  </div>
+
   <p class="section-title">False positive test — should NOT block</p>
   <div class="grid">
 

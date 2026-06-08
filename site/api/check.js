@@ -30,6 +30,25 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "url is required" });
   }
 
+  // ── Test URL simulation ──────────────────────────────────
+  // Requests for URLs containing these slugs return fake threat
+  // data so the full extension pipeline can be tested locally
+  // without needing a real malicious site.
+  const TEST_SLUGS = {
+    "pd-test-malware":        "MALWARE",
+    "pd-test-phishing":       "SOCIAL_ENGINEERING",
+    "pd-test-unwanted":       "UNWANTED_SOFTWARE",
+    "pd-test-harmful":        "POTENTIALLY_HARMFUL_APPLICATION",
+  };
+  for (const [slug, threatType] of Object.entries(TEST_SLUGS)) {
+    if (url.includes(slug)) {
+      return res.status(200).json({
+        matches: [{ threatType, platformType: "ANY_PLATFORM", threatEntryType: "URL" }],
+      });
+    }
+  }
+  // ────────────────────────────────────────────────────────
+
   if (!apiKey) {
     return res.status(500).json({ error: "Token not configured" });
   }

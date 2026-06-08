@@ -85,14 +85,52 @@ async function addBypass(url) {
 }
 
 // ============================================================
-// STATS
+// PERSISTENT BLOCK HISTORY (survives browser restarts)
 // ============================================================
 
-async function incrementBlockedCount() {
+async function logBlockedSite(url, threatType) {
+  let domain = url;
+  try { domain = new URL(url).hostname; } catch (_) {}
+
+  const entry = {
+    url,
+    domain,
+    type: threatType,
+    timestamp: Date.now(),
+  };
+
   return new Promise((resolve) => {
-    chrome.storage.session.get({ blockedCount: 0 }, (data) => {
-      chrome.storage.session.set({ blockedCount: data.blockedCount + 1 }, resolve);
+    chrome.storage.local.get({ history: [], tally: {} }, (data) => {
+      // Keep most recent 200 entries
+      const history = [entry, ...data.history].slice(0, 200);
+      const tally = { ...data.tally };
+      tally[threatType] = (tally[threatType] || 0) + 1;
+      tally.total = (tally.total || 0) + 1;
+      chrome.storage.local.set({ history, tally }, resolve);
     });
+  });
+}
+
+// ============================================================
+// BADGE
+// ============================================================
+
+function setBadgeSafe(tabId) {
+  chrome.action.setBadgeText({ text: "", tabId });
+}
+
+function setBadgeThreat(tabId) {
+  chrome.action.setBadgeText({ text: "!", tabId });
+  chrome.action.setBadgeBackgroundColor({ color: "#c5221f", tabId });
+}
+
+// Update badge text to show total lifetime blocks
+function refreshBadgeCount() {
+  chrome.storage.local.get({ tally: {} }, (data) => {
+    const total = data.tally.total || 0;
+    // Show count on all tabs via the default (no tabId = all tabs)
+    chrome.action.setBadgeBackgroundColor({ color: "#c5221f" });
+    chrome.action.setBadgeText({ text: total > 0 ? String(total) : "" });
   });
 }
 
@@ -104,36 +142,41 @@ async function handleNavigation(tabId, url) {
   if (shouldSkip(url)) return;
   if (await isBypassed(url)) {
     console.log("[PhishingDetector] Bypassed (user allowed):", url);
+    setBadgeSafe(tabId);
     return;
   }
 
   const threatType = await checkSafeBrowsing(url);
   if (threatType) {
     console.warn("[PhishingDetector] THREAT DETECTED:", threatType, url);
-    await incrementBlockedCount();
+    await logBlockedSite(url, threatType);
+    setBadgeThreat(tabId);
+    refreshBadgeCount();
     const warningUrl = buildWarningUrl(url, threatType, "safebrowsing");
     chrome.tabs.update(tabId, { url: warningUrl });
+  } else {
+    setBadgeSafe(tabId);
   }
 }
 
 // ============================================================
 // NAVIGATION LISTENER
-// onCommitted fires when the navigation is committed to the tab,
-// giving us a valid tabId and url to redirect away from.
 // ============================================================
 
 chrome.webNavigation.onCommitted.addListener((details) => {
-  if (details.frameId !== 0) return; // top-level frame only
+  if (details.frameId !== 0) return;
   handleNavigation(details.tabId, details.url);
 });
 
+// Restore badge count on service worker startup
+refreshBadgeCount();
+
 // ============================================================
 // MESSAGE LISTENER
-// Handles messages from content.js, warning.js, and popup.js
 // ============================================================
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  // Content script detected a payment redirect in inline scripts
+  // Content script detected a payment redirect
   if (message.type === "PAYMENT_REDIRECT_DETECTED") {
     const { sourceUrl, redirectUrl, detail } = message;
     const tabId = sender.tab?.id;
@@ -143,22 +186,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       return false;
     }
 
-    // Bypass is keyed on the source page — if the user already allowed this
-    // page to redirect, let it through
-    isBypassed(sourceUrl).then((bypassed) => {
+    isBypassed(sourceUrl).then(async (bypassed) => {
       if (bypassed) {
         sendResponse({ status: "bypassed" });
         return;
       }
-      incrementBlockedCount();
-      // Use redirectUrl as the warning page's url param so "Proceed anyway"
-      // navigates directly to the destination instead of looping back to source
+      await logBlockedSite(redirectUrl, "PAYMENT_REDIRECT");
+      setBadgeThreat(tabId);
+      refreshBadgeCount();
       const warningUrl = buildWarningUrl(redirectUrl, "PAYMENT_REDIRECT", "contentscript", detail);
       chrome.tabs.update(tabId, { url: warningUrl });
       sendResponse({ status: "redirected" });
     });
 
-    return true; // keep channel open for async response
+    return true;
   }
 
   // Warning page: user clicked "Proceed anyway"
@@ -169,10 +210,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 
-  // Popup: request session stats
+  // Popup: request stats
   if (message.type === "GET_STATS") {
-    chrome.storage.session.get({ blockedCount: 0, bypassed: [] }, (data) => {
-      sendResponse({ blockedCount: data.blockedCount, bypassed: data.bypassed });
+    chrome.storage.local.get({ history: [], tally: {} }, (localData) => {
+      chrome.storage.session.get({ bypassed: [] }, (sessionData) => {
+        sendResponse({
+          tally: localData.tally,
+          history: localData.history.slice(0, 20), // send most recent 20
+          bypassed: sessionData.bypassed,
+        });
+      });
     });
     return true;
   }
