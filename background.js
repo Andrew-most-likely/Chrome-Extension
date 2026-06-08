@@ -112,29 +112,6 @@ async function logBlockedSite(url, threatType) {
 }
 
 // ============================================================
-// BADGE
-// ============================================================
-
-function setBadgeSafe(tabId) {
-  chrome.action.setBadgeText({ text: "", tabId });
-}
-
-function setBadgeThreat(tabId) {
-  chrome.action.setBadgeText({ text: "!", tabId });
-  chrome.action.setBadgeBackgroundColor({ color: "#c5221f", tabId });
-}
-
-// Update badge text to show total lifetime blocks
-function refreshBadgeCount() {
-  chrome.storage.local.get({ tally: {} }, (data) => {
-    const total = data.tally.total || 0;
-    // Show count on all tabs via the default (no tabId = all tabs)
-    chrome.action.setBadgeBackgroundColor({ color: "#c5221f" });
-    chrome.action.setBadgeText({ text: total > 0 ? String(total) : "" });
-  });
-}
-
-// ============================================================
 // CORE INTERCEPT LOGIC
 // ============================================================
 
@@ -142,7 +119,6 @@ async function handleNavigation(tabId, url) {
   if (shouldSkip(url)) return;
   if (await isBypassed(url)) {
     console.log("[PhishingDetector] Bypassed (user allowed):", url);
-    setBadgeSafe(tabId);
     return;
   }
 
@@ -150,12 +126,8 @@ async function handleNavigation(tabId, url) {
   if (threatType) {
     console.warn("[PhishingDetector] THREAT DETECTED:", threatType, url);
     await logBlockedSite(url, threatType);
-    setBadgeThreat(tabId);
-    refreshBadgeCount();
     const warningUrl = buildWarningUrl(url, threatType, "safebrowsing");
     chrome.tabs.update(tabId, { url: warningUrl });
-  } else {
-    setBadgeSafe(tabId);
   }
 }
 
@@ -167,9 +139,6 @@ chrome.webNavigation.onCommitted.addListener((details) => {
   if (details.frameId !== 0) return;
   handleNavigation(details.tabId, details.url);
 });
-
-// Restore badge count on service worker startup
-refreshBadgeCount();
 
 // ============================================================
 // MESSAGE LISTENER
@@ -192,14 +161,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         return;
       }
       await logBlockedSite(redirectUrl, "PAYMENT_REDIRECT");
-      setBadgeThreat(tabId);
-      refreshBadgeCount();
       const warningUrl = buildWarningUrl(redirectUrl, "PAYMENT_REDIRECT", "contentscript", detail);
       chrome.tabs.update(tabId, { url: warningUrl });
       sendResponse({ status: "redirected" });
     });
 
     return true;
+  }
+
+  // Warning page: user clicked "Go back to safety"
+  // history.back() would return to the malicious URL and re-trigger the warning,
+  // so background navigates the tab to the new tab page instead.
+  if (message.type === "GO_BACK_SAFE") {
+    chrome.tabs.update(sender.tab.id, { url: "chrome://newtab" });
+    sendResponse({ status: "ok" });
+    return false;
   }
 
   // Warning page: user clicked "Proceed anyway"

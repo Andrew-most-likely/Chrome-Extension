@@ -95,12 +95,9 @@ function setupButtons() {
   const { url } = getParams();
 
   document.getElementById("btn-back").addEventListener("click", () => {
-    if (window.history.length > 1) {
-      window.history.back();
-    } else {
-      // No history — open new tab page instead
-      window.location.href = "chrome://newtab";
-    }
+    // history.back() would return to the malicious URL and re-trigger the warning.
+    // Ask background to navigate the tab to the new tab page instead.
+    chrome.runtime.sendMessage({ type: "GO_BACK_SAFE" });
   });
 
   document.getElementById("btn-proceed").addEventListener("click", () => {
