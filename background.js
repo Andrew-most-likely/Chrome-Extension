@@ -1,20 +1,13 @@
 // ============================================================
 // CONFIGURATION
-// API key lives in config.js (gitignored). Copy config.example.js
-// to config.js and add your key before loading the extension.
+// Proxy URL lives in config.js (gitignored). Copy config.example.js
+// to config.js and fill in your Vercel deployment URL.
+// The actual API key is stored in Vercel environment variables.
 // ============================================================
 
 importScripts("config.js");
 
-const SAFE_BROWSING_API_KEY = CONFIG.SAFE_BROWSING_API_KEY;
-const SAFE_BROWSING_URL = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${SAFE_BROWSING_API_KEY}`;
-
-const THREAT_TYPES = [
-  "MALWARE",
-  "SOCIAL_ENGINEERING",
-  "UNWANTED_SOFTWARE",
-  "POTENTIALLY_HARMFUL_APPLICATION",
-];
+const PROXY_URL = CONFIG.PROXY_URL;
 
 // ============================================================
 // HELPERS
@@ -47,30 +40,17 @@ function buildWarningUrl(originalUrl, threatType, source, detail) {
 // ============================================================
 
 async function checkSafeBrowsing(url) {
-  if (SAFE_BROWSING_API_KEY === "YOUR_API_KEY_HERE") return null;
-
-  const body = {
-    client: {
-      clientId: "phishing-detector-extension",
-      clientVersion: "1.0.0",
-    },
-    threatInfo: {
-      threatTypes: THREAT_TYPES,
-      platformTypes: ["ANY_PLATFORM"],
-      threatEntryTypes: ["URL"],
-      threatEntries: [{ url }],
-    },
-  };
+  if (!PROXY_URL || PROXY_URL.includes("your-project")) return null;
 
   try {
-    const response = await fetch(SAFE_BROWSING_URL, {
+    const response = await fetch(PROXY_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ url }),
     });
 
     if (!response.ok) {
-      console.warn("[PhishingDetector] Safe Browsing API error:", response.status);
+      console.warn("[PhishingDetector] Proxy error:", response.status);
       return null;
     }
 
@@ -80,7 +60,7 @@ async function checkSafeBrowsing(url) {
     }
     return null;
   } catch (err) {
-    console.error("[PhishingDetector] Safe Browsing fetch failed:", err);
+    console.error("[PhishingDetector] Proxy fetch failed:", err);
     return null;
   }
 }

@@ -11,7 +11,7 @@
     "scripting"
   ],
   "host_permissions": [
-    "https://safebrowsing.googleapis.com/*",
+    "https://chrome-extension-nu-eight.vercel.app/*",
     "https://*/*",
     "http://*/*"
   ],
