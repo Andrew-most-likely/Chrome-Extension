@@ -1,10 +1,8 @@
 # Vanta Security
 
-![Vanta Security](store-assets/promo-marquee.png)
+![Vanta Security](assets/promo-marquee.png)
 
 A Chrome extension that provides real-time protection against phishing, malware, payment redirect fraud, and credential-harvesting forms.
-
-![Small promo](store-assets/promo-small.png)
 
 ## Features
 
