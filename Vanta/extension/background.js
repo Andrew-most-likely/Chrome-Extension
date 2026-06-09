@@ -168,15 +168,6 @@ async function checkSafeBrowsing(url) {
   const cached = getCachedResult(url);
   if (cached !== undefined) return cached;
 
-  // 2. Hash-prefix pre-filter: skip API call if prefix not in downloaded lists
-  if (hashPrefixSets.size > 0) {
-    const prefixHit = await isInPrefixCache(url);
-    if (!prefixHit) {
-      setCachedResult(url, null);
-      return null;
-    }
-  }
-
   if (!PROXY_URL || PROXY_URL.includes("your-project")) return null;
 
   try {
