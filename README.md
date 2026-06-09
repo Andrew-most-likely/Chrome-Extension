@@ -53,15 +53,3 @@ const CONFIG = {
 
 The `site/` directory is a Vercel serverless function that proxies requests to the Google Safe Browsing API. The `DETECTOR_TOKEN` environment variable must be set in Vercel to match the `PROXY_SECRET` in `config.js`. The token is validated server-side and never exposed to the client.
 
-## Packaging for the Chrome Web Store
-
-```bash
-bash store-assets/package.sh
-```
-
-Output: `vanta-security-v<version>.zip` - ready to upload at https://chrome.google.com/webstore/devconsole
-
-## Links
-
-- Extension website / privacy policy: https://chrome-extension-nu-eight.vercel.app
-- Chrome Web Store listing copy: `store-assets/listing.txt`
