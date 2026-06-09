@@ -3,7 +3,7 @@
   "description": "Real-time phishing protection. Blocks dangerous sites, payment redirects, and credential-harvesting forms before they load.",
   "version": "1.0.0",
   "manifest_version": 3,
-  "homepage_url": "https://andrew-most-likely.github.io/Chrome-Extension/site/index.html",
+  "homepage_url": "https://vanta-security.com",
   "minimum_chrome_version": "102",
 
   "permissions": [
