@@ -14,7 +14,6 @@
     "alarms"
   ],
   "host_permissions": [
-    "https://andrew-most-likely.github.io/*",
     "https://*/*",
     "http://*/*"
   ],

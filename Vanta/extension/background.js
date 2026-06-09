@@ -211,6 +211,19 @@ const HASH_REFRESH_MINUTES = 30;
 async function fetchHashPrefixes() {
   if (!UPDATE_URL) return;
 
+  // Restore persisted state and check minimum wait interval
+  const stored = await new Promise((resolve) =>
+    chrome.storage.local.get({ hashLastFetch: 0, hashStateTokens: {} }, resolve)
+  );
+
+  const minWaitMs = HASH_REFRESH_MINUTES * 60 * 1000;
+  if (Date.now() - stored.hashLastFetch < minWaitMs) return;
+
+  // Restore state tokens from storage into memory
+  for (const [type, state] of Object.entries(stored.hashStateTokens)) {
+    hashStateTokens.set(type, state);
+  }
+
   try {
     const listUpdateRequests = HASH_THREAT_TYPES.map((threatType) => ({
       threatType,
@@ -278,6 +291,11 @@ async function fetchHashPrefixes() {
 
       if (newClientState) hashStateTokens.set(threatType, newClientState);
     }
+
+    // Persist updated state tokens and fetch timestamp
+    const tokenObj = {};
+    for (const [type, state] of hashStateTokens) tokenObj[type] = state;
+    chrome.storage.local.set({ hashLastFetch: Date.now(), hashStateTokens: tokenObj });
 
     const total = [...hashPrefixSets.values()].reduce((s, set) => s + set.size, 0);
     console.log("[VantaSecurity] Hash prefixes updated. Total entries:", total);
