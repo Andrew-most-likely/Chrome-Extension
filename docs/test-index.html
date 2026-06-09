@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vanta Security — Test Suite</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: #f8f9fa;
+      color: #202124;
+      padding: 40px 24px;
+    }
+    h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+    .subtitle { font-size: 14px; color: #5f6368; margin-bottom: 32px; }
+    .section-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #5f6368; margin-bottom: 12px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px; max-width: 960px; margin-bottom: 40px;
+    }
+    .card {
+      background: #fff; border: 1px solid #e8eaed; border-radius: 8px;
+      padding: 20px; display: flex; flex-direction: column; gap: 10px;
+    }
+    .card-top { display: flex; align-items: center; gap: 10px; }
+    .badge {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; padding: 3px 8px; border-radius: 3px; flex-shrink: 0;
+    }
+    .badge-block  { background: #fce8e6; color: #c5221f; }
+    .badge-pass   { background: #e6f4ea; color: #137333; }
+    .card h3 { font-size: 15px; font-weight: 600; }
+    .card p  { font-size: 13px; color: #5f6368; line-height: 1.5; flex: 1; }
+    .card a {
+      display: inline-block; margin-top: 4px; padding: 8px 16px;
+      border-radius: 5px; font-size: 13px; font-weight: 500;
+      text-decoration: none; text-align: center;
+    }
+    .link-block { background: #fce8e6; color: #c5221f; border: 1px solid #f5c6c5; }
+    .link-pass  { background: #e6f4ea; color: #137333; border: 1px solid #d2e3cc; }
+    .legend { display: flex; gap: 20px; margin-bottom: 28px; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #3c4043; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+  <h1>Vanta Security — Test Suite</h1>
+  <p class="subtitle">Each link opens in a new tab. The warning page should appear for all "Block" tests.</p>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#c5221f"></div> Should be blocked</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#137333"></div> Should pass through</div>
+  </div>
+
+  <p class="section-title">Safe Browsing API tests — should block</p>
+  <div class="grid">
+    <div class="card">
+      <div class="card-top"><span class="badge badge-block">Block</span><h3>Malware</h3></div>
+      <p>Proxy returns a <code>MALWARE</code> threat for this URL.</p>
+      <a href="/pd-test-malware.html" target="_blank" class="link-block">Run test →</a>
+    </div>
+    <div class="card">
+      <div class="card-top"><span class="badge badge-block">Block</span><h3>Phishing / Social Engineering</h3></div>
+      <p>Proxy returns a <code>SOCIAL_ENGINEERING</code> threat.</p>
+      <a href="/pd-test-phishing.html" target="_blank" class="link-block">Run test →</a>
+    </div>
+    <div class="card">
+      <div class="card-top"><span class="badge badge-block">Block</span><h3>Unwanted Software</h3></div>
+      <p>Proxy returns an <code>UNWANTED_SOFTWARE</code> threat.</p>
+      <a href="/pd-test-unwanted.html" target="_blank" class="link-block">Run test →</a>
+    </div>
+  </div>
+
+  <p class="section-title">Real-world test — should block</p>
+  <div class="grid">
+    <div class="card">
+      <div class="card-top"><span class="badge badge-block">Block</span><h3>Google Safe Browsing malware test</h3></div>
+      <p>Official Google test URL that Safe Browsing API flags as MALWARE.</p>
+      <a href="http://testsafebrowsing.appspot.com/s/malware.html" target="_blank" class="link-block">Run test →</a>
+    </div>
+  </div>
+
+  <p class="section-title">False positive test — should NOT block</p>
+  <div class="grid">
+    <div class="card">
+      <div class="card-top"><span class="badge badge-pass">Pass</span><h3>Safe site</h3></div>
+      <p>A known-safe site. The extension must not block this.</p>
+      <a href="https://example.com" target="_blank" class="link-pass">Run test →</a>
+    </div>
+  </div>
+</body>
+</html>

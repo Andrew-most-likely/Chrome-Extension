@@ -139,13 +139,7 @@ function runHeuristics(url) {
 
 function shouldSkip(url) {
   if (!url) return true;
-  if (url.startsWith("chrome://")) return true;
-  if (url.startsWith("chrome-extension://")) return true;
-  if (url.startsWith("about:")) return true;
-  if (url.startsWith("edge://")) return true;
-  if (url.startsWith("data:")) return true;
-  if (url.startsWith("file://")) return true;
-  return false;
+  return !url.startsWith("http://") && !url.startsWith("https://");
 }
 
 function buildWarningUrl(originalUrl, threatType, source, detail) {
