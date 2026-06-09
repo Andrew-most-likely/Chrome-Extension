@@ -34,7 +34,7 @@ window.addEventListener("__phishing_redirect__", (e) => {
     },
     (response) => {
       if (chrome.runtime.lastError) {
-        console.warn("[PhishingDetector]", chrome.runtime.lastError.message);
+        console.warn("[VantaSecurity]", chrome.runtime.lastError.message);
       }
     }
   );

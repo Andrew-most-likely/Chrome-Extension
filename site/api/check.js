@@ -82,7 +82,7 @@ export default async function handler(req, res) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         client: {
-          clientId: "phishing-detector-extension",
+          clientId: "vanta-security-extension",
           clientVersion: "1.0.0",
         },
         threatInfo: {

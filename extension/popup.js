@@ -171,6 +171,24 @@ chrome.runtime.sendMessage({ type: "GET_STATS" }, (response) => {
   render(response);
 });
 
+// ── Protection toggle ──
+const toggleInput = document.getElementById("protection-toggle");
+const toggleState = document.getElementById("toggle-state");
+
+chrome.storage.local.get({ enabled: true }, ({ enabled }) => {
+  toggleInput.checked = enabled;
+  toggleState.textContent = enabled ? "On" : "Off";
+  toggleState.className = enabled ? "on" : "off";
+});
+
+toggleInput.addEventListener("change", () => {
+  const enabled = toggleInput.checked;
+  chrome.storage.local.set({ enabled }, () => {
+    toggleState.textContent = enabled ? "On" : "Off";
+    toggleState.className = enabled ? "on" : "off";
+  });
+});
+
 // ── Whitelist add ──
 function addWhitelistEntry() {
   const input = document.getElementById("whitelist-input");

@@ -127,7 +127,7 @@ async function checkSafeBrowsing(url) {
     });
 
     if (!response.ok) {
-      console.warn("[PhishingDetector] Proxy error:", response.status);
+      console.warn("[VantaSecurity] Proxy error:", response.status);
       return null;
     }
 
@@ -137,7 +137,7 @@ async function checkSafeBrowsing(url) {
     }
     return null;
   } catch (err) {
-    console.error("[PhishingDetector] Proxy fetch failed:", err);
+    console.error("[VantaSecurity] Proxy fetch failed:", err);
     return null;
   }
 }
@@ -255,17 +255,17 @@ async function logBlockedSite(url, threatType) {
 async function handleNavigation(tabId, url) {
   if (shouldSkip(url)) return;
   if (await isBypassed(url)) {
-    console.log("[PhishingDetector] Bypassed (user allowed):", url);
+    console.log("[VantaSecurity] Bypassed (user allowed):", url);
     return;
   }
   if (await isWhitelisted(url)) {
-    console.log("[PhishingDetector] Whitelisted:", url);
+    console.log("[VantaSecurity] Whitelisted:", url);
     return;
   }
 
   const threatType = await checkSafeBrowsing(url);
   if (threatType) {
-    console.warn("[PhishingDetector] THREAT DETECTED:", threatType, url);
+    console.warn("[VantaSecurity] THREAT DETECTED:", threatType, url);
     await logBlockedSite(url, threatType);
     const warningUrl = buildWarningUrl(url, threatType, "safebrowsing");
     chrome.tabs.update(tabId, { url: warningUrl });
@@ -283,22 +283,28 @@ chrome.webNavigation.onBeforeNavigate.addListener((details) => {
   const { tabId, url } = details;
   if (shouldSkip(url)) return;
 
-  isBypassed(url).then(async (bypassed) => {
-    if (bypassed) return;
-    if (await isWhitelisted(url)) return;
-    const heuristicThreat = runHeuristics(url);
-    if (heuristicThreat) {
-      console.warn("[PhishingDetector] HEURISTIC HIT:", url);
-      await logBlockedSite(url, "HEURISTIC");
-      chrome.tabs.update(tabId, { url: buildWarningUrl(url, "HEURISTIC", "heuristic") });
-    }
+  chrome.storage.local.get({ enabled: true }, ({ enabled }) => {
+    if (!enabled) return;
+    isBypassed(url).then(async (bypassed) => {
+      if (bypassed) return;
+      if (await isWhitelisted(url)) return;
+      const heuristicThreat = runHeuristics(url);
+      if (heuristicThreat) {
+        console.warn("[VantaSecurity] HEURISTIC HIT:", url);
+        await logBlockedSite(url, "HEURISTIC");
+        chrome.tabs.update(tabId, { url: buildWarningUrl(url, "HEURISTIC", "heuristic") });
+      }
+    });
   });
 });
 
 // Safe Browsing runs on onCommitted (page is loading, network is available).
 chrome.webNavigation.onCommitted.addListener((details) => {
   if (details.frameId !== 0) return;
-  handleNavigation(details.tabId, details.url);
+  chrome.storage.local.get({ enabled: true }, ({ enabled }) => {
+    if (!enabled) return;
+    handleNavigation(details.tabId, details.url);
+  });
 });
 
 // ============================================================
@@ -316,15 +322,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       return false;
     }
 
-    isBypassed(sourceUrl).then(async (bypassed) => {
-      if (bypassed) {
-        sendResponse({ status: "bypassed" });
-        return;
-      }
-      await logBlockedSite(sourceUrl, "FORM_HIJACK");
-      const warningUrl = buildWarningUrl(sourceUrl, "FORM_HIJACK", "contentscript", detail);
-      chrome.tabs.update(tabId, { url: warningUrl });
-      sendResponse({ status: "redirected" });
+    chrome.storage.local.get({ enabled: true }, ({ enabled }) => {
+      if (!enabled) { sendResponse({ status: "disabled" }); return; }
+      isBypassed(sourceUrl).then(async (bypassed) => {
+        if (bypassed) {
+          sendResponse({ status: "bypassed" });
+          return;
+        }
+        await logBlockedSite(sourceUrl, "FORM_HIJACK");
+        const warningUrl = buildWarningUrl(sourceUrl, "FORM_HIJACK", "contentscript", detail);
+        chrome.tabs.update(tabId, { url: warningUrl });
+        sendResponse({ status: "redirected" });
+      });
     });
 
     return true;
@@ -340,15 +349,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       return false;
     }
 
-    isBypassed(sourceUrl).then(async (bypassed) => {
-      if (bypassed) {
-        sendResponse({ status: "bypassed" });
-        return;
-      }
-      await logBlockedSite(redirectUrl, "PAYMENT_REDIRECT");
-      const warningUrl = buildWarningUrl(redirectUrl, "PAYMENT_REDIRECT", "contentscript", detail);
-      chrome.tabs.update(tabId, { url: warningUrl });
-      sendResponse({ status: "redirected" });
+    chrome.storage.local.get({ enabled: true }, ({ enabled }) => {
+      if (!enabled) { sendResponse({ status: "disabled" }); return; }
+      isBypassed(sourceUrl).then(async (bypassed) => {
+        if (bypassed) {
+          sendResponse({ status: "bypassed" });
+          return;
+        }
+        await logBlockedSite(redirectUrl, "PAYMENT_REDIRECT");
+        const warningUrl = buildWarningUrl(redirectUrl, "PAYMENT_REDIRECT", "contentscript", detail);
+        chrome.tabs.update(tabId, { url: warningUrl });
+        sendResponse({ status: "redirected" });
+      });
     });
 
     return true;

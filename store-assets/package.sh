@@ -4,12 +4,12 @@
 #   bash store-assets/package.sh
 #
 # Requires: zip (available in Git Bash on Windows)
-# Output: phishing-detector-v<version>.zip in the current directory
+# Output: vanta-security-v<version>.zip in the current directory
 
 set -e
 
 VERSION=$(grep '"version"' extension/manifest.json | grep -oP '"\d+\.\d+\.\d+"' | tr -d '"')
-OUTPUT="phishing-detector-v${VERSION}.zip"
+OUTPUT="vanta-security-v${VERSION}.zip"
 
 echo "Building $OUTPUT ..."
 

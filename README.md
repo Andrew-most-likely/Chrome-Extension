@@ -1,4 +1,4 @@
-# Phishing Detector
+# Vanta Security
 
 A Chrome extension that provides real-time protection against phishing, malware, payment redirect fraud, and credential-harvesting forms.
 
@@ -55,7 +55,7 @@ The `site/` directory is a Vercel serverless function that proxies requests to t
 bash store-assets/package.sh
 ```
 
-Output: `phishing-detector-v<version>.zip` - ready to upload at https://chrome.google.com/webstore/devconsole
+Output: `vanta-security-v<version>.zip` - ready to upload at https://chrome.google.com/webstore/devconsole
 
 ## Links
 

@@ -1,5 +1,5 @@
 ====================================================
-CHROME WEB STORE LISTING - Phishing Detector
+CHROME WEB STORE LISTING - Vanta Security
 ====================================================
 
 --- SHORT DESCRIPTION (132 char max) ---
@@ -23,7 +23,7 @@ https://chrome-extension-nu-eight.vercel.app/privacy
 
 
 --- LONG DESCRIPTION ---
-Phishing Detector protects you from phishing sites, malware, payment fraud, and credential-harvesting forms in real time - before any harm is done.
+Vanta Security protects you from phishing sites, malware, payment fraud, and credential-harvesting forms in real time - before any harm is done.
 
 WHAT IT BLOCKS
 
