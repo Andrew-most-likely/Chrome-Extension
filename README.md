@@ -4,8 +4,6 @@
 
 A Chrome extension that provides real-time protection against phishing, malware, payment redirect fraud, and credential-harvesting forms.
 
-![Small promo](store-assets/promo-small.png)
-
 ## Features
 
 - **Google Safe Browsing** - Every URL checked against Google's threat database (malware, phishing, unwanted software)
