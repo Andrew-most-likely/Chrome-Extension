@@ -162,6 +162,89 @@ function render(data) {
   }
 }
 
+// ── Tab status ──
+const TAB_STATUS_TEXT = {
+  clean:       "Clean",
+  blocked:     "Previously blocked",
+  whitelisted: "Whitelisted",
+  bypassed:    "Bypassed (allowed)",
+  disabled:    "Protection off",
+  unknown:     "N/A",
+  loading:     "Checking...",
+};
+
+function renderTabStatus(status, type) {
+  const el = document.getElementById("tab-status-text");
+  const label = status === "blocked" && type
+    ? `Blocked - ${THREAT_SHORT[type] || type}`
+    : (TAB_STATUS_TEXT[status] || "Unknown");
+  el.textContent = label;
+  el.className = `tab-status-value ${status}`;
+}
+
+chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+  const tab = tabs[0];
+  if (!tab || !tab.url) {
+    renderTabStatus("unknown");
+    return;
+  }
+  chrome.runtime.sendMessage({ type: "GET_TAB_STATUS", url: tab.url }, (response) => {
+    if (chrome.runtime.lastError || !response) {
+      renderTabStatus("unknown");
+      return;
+    }
+    renderTabStatus(response.status, response.type);
+  });
+});
+
+// ── Scan button ──
+document.getElementById("scan-btn").addEventListener("click", () => {
+  const btn = document.getElementById("scan-btn");
+  btn.disabled = true;
+  btn.textContent = "Scanning...";
+
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const tab = tabs[0];
+    if (!tab || !tab.url) {
+      btn.disabled = false;
+      btn.textContent = "Scan";
+      return;
+    }
+    chrome.runtime.sendMessage({ type: "SCAN_TAB", url: tab.url, tabId: tab.id }, (response) => {
+      btn.disabled = false;
+      btn.textContent = "Scan";
+      if (chrome.runtime.lastError || !response) return;
+      if (response.status === "clean") {
+        renderTabStatus("clean");
+      } else if (response.status === "threat") {
+        renderTabStatus("blocked", response.threatType);
+      } else if (response.status === "disabled") {
+        renderTabStatus("disabled");
+      }
+    });
+  });
+});
+
+// ── Clear history ──
+document.getElementById("clear-history-btn").addEventListener("click", () => {
+  chrome.runtime.sendMessage({ type: "CLEAR_HISTORY" }, () => {
+    if (chrome.runtime.lastError) return;
+    // Reset tally display
+    ["tally-total", "tally-phishing", "tally-malware", "tally-payment"].forEach((id) => {
+      const el = document.getElementById(id);
+      el.textContent = "0";
+      el.className = "tally-value zero";
+    });
+    // Reset history list
+    const histList = document.getElementById("history-list");
+    histList.innerHTML = "";
+    const empty = document.createElement("li");
+    empty.className = "empty-state";
+    empty.textContent = "No threats blocked yet";
+    histList.appendChild(empty);
+  });
+});
+
 chrome.runtime.sendMessage({ type: "GET_STATS" }, (response) => {
   if (chrome.runtime.lastError) {
     console.warn("[Popup]", chrome.runtime.lastError.message);

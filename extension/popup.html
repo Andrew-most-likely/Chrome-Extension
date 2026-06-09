@@ -97,6 +97,79 @@
       background: #818cf8;
     }
 
+    /* ── Tab status bar ── */
+    .tab-status-bar {
+      padding: 8px 16px;
+      background: #161b22;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .tab-status-info {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      min-width: 0;
+    }
+    .tab-status-label {
+      color: rgba(240,246,252,0.45);
+      flex-shrink: 0;
+    }
+    .tab-status-value {
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .tab-status-value.loading   { color: rgba(240,246,252,0.3); }
+    .tab-status-value.clean     { color: #4ade80; }
+    .tab-status-value.blocked   { color: #f87171; }
+    .tab-status-value.whitelisted { color: #4ade80; }
+    .tab-status-value.bypassed  { color: #fb923c; }
+    .tab-status-value.disabled  { color: rgba(240,246,252,0.3); }
+    .tab-status-value.unknown   { color: rgba(240,246,252,0.3); }
+    .scan-btn {
+      flex-shrink: 0;
+      font-size: 11px;
+      font-weight: 600;
+      font-family: inherit;
+      padding: 4px 10px;
+      background: rgba(99,102,241,0.15);
+      color: #818cf8;
+      border: 1px solid rgba(99,102,241,0.3);
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 150ms, color 150ms;
+    }
+    .scan-btn:hover  { background: rgba(99,102,241,0.3); color: #a5b4fc; }
+    .scan-btn:active { background: rgba(99,102,241,0.45); }
+    .scan-btn:disabled { opacity: 0.4; cursor: default; }
+
+    /* ── Section title row (with action button) ── */
+    .section-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .section-title-row .section-title { margin-bottom: 0; }
+    .clear-btn {
+      font-size: 9px;
+      font-weight: 600;
+      font-family: inherit;
+      padding: 2px 7px;
+      background: none;
+      color: rgba(240,246,252,0.25);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 120ms, color 120ms, border-color 120ms;
+    }
+    .clear-btn:hover { background: rgba(239,68,68,0.1); color: #f87171; border-color: rgba(239,68,68,0.3); }
+
     /* ── Tally row ── */
     .tally {
       display: grid;
@@ -284,6 +357,14 @@
     </label>
   </div>
 
+  <div class="tab-status-bar" id="tab-status-bar">
+    <div class="tab-status-info">
+      <span class="tab-status-label">This page:</span>
+      <span id="tab-status-text" class="tab-status-value loading">Checking...</span>
+    </div>
+    <button id="scan-btn" class="scan-btn">Scan</button>
+  </div>
+
   <div class="tally">
     <div class="tally-item">
       <div class="tally-value" id="tally-total">0</div>
@@ -304,7 +385,10 @@
   </div>
 
   <div class="section">
-    <div class="section-title">Recent blocks</div>
+    <div class="section-title-row">
+      <div class="section-title">Recent blocks</div>
+      <button id="clear-history-btn" class="clear-btn">Clear</button>
+    </div>
     <ul class="history-list" id="history-list">
       <li class="empty-state">No threats blocked yet</li>
     </ul>

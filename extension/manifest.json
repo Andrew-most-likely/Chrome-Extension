@@ -10,7 +10,8 @@
     "webNavigation",
     "tabs",
     "storage",
-    "scripting"
+    "scripting",
+    "alarms"
   ],
   "host_permissions": [
     "https://andrew-most-likely.github.io/*",
